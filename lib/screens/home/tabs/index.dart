@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mainventori/screens/home/tabs/tab_dashboard/index.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'package:mainventori/screens/home/tabs/tab_customers.dart';
-import 'package:mainventori/screens/home/tabs/tab_dashboard.dart';
 import 'package:mainventori/screens/home/tabs/tab_inventory.dart';
 import 'package:mainventori/screens/home/tabs/tab_orders.dart';
 import 'package:mainventori/screens/home/tabs/tab_settings.dart';
