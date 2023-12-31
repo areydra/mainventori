@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:mainventori/screens/home/index.dart';
 
 void main() {
@@ -13,7 +14,8 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       title: 'SidebarX Example',
       debugShowCheckedModeBanner: false,
-      home: HomeScreen()
+      home: HomeScreen(),
+      builder: FlutterSmartDialog.init(),
     );
   }
 }
