@@ -5,7 +5,7 @@ import 'package:mainventori/screens/home/tabs/tab_customers.dart';
 import 'package:mainventori/screens/home/tabs/tab_inventory/index.dart';
 import 'package:mainventori/screens/home/tabs/tab_orders/index.dart';
 import 'package:mainventori/screens/home/tabs/tab_settings.dart';
-import 'package:mainventori/screens/home/tabs/tab_suppliers.dart';
+import 'package:mainventori/screens/home/tabs/tab_suppliers/index.dart';
 
 class Tabs extends StatelessWidget {
   final SidebarXController controller;
