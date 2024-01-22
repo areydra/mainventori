@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mainventori/widgets/dialog_customer_fields/index.dart';
+import 'package:mainventori/screens/home/tabs/tab_customers/widgets/dialog_customer_fields.dart';
 import 'package:mainventori/widgets/separator_horizontal.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
@@ -19,58 +19,51 @@ class CustomersStock {
 
 List<CustomersStock> products = [
   CustomersStock(
-    name: 'Bura',
-    contactNumber: '62866219304',
-    email: 'bura@gmail',
-    address: 'Pesona Kahuripan 2'
-  ),
+      name: 'Bura',
+      contactNumber: '62866219304',
+      email: 'bura@gmail',
+      address: 'Pesona Kahuripan 2'),
   CustomersStock(
-    name: 'Bursa',
-    contactNumber: '62866219305',
-    email: 'bursa@gmail',
-    address: 'Pesona Kahuripan 2'
-  ),
+      name: 'Bursa',
+      contactNumber: '62866219305',
+      email: 'bursa@gmail',
+      address: 'Pesona Kahuripan 2'),
   CustomersStock(
-    name: 'Buara',
-    contactNumber: '62866219307',
-    email: 'buara@gmail',
-    address: 'Pesona Kahuripan 2'
-  ),
+      name: 'Buara',
+      contactNumber: '62866219307',
+      email: 'buara@gmail',
+      address: 'Pesona Kahuripan 2'),
   CustomersStock(
-    name: 'Burvv',
-    contactNumber: '62866219308',
-    email: 'burvv@gmail',
-    address: 'Pesona Kahuripan 2'
-  ),
+      name: 'Burvv',
+      contactNumber: '62866219308',
+      email: 'burvv@gmail',
+      address: 'Pesona Kahuripan 2'),
   CustomersStock(
-    name: 'Buraax',
-    contactNumber: '62866219309',
-    email: 'buraax@gmail',
-    address: 'Pesona Kahuripan 2'
-  ),
+      name: 'Buraax',
+      contactNumber: '62866219309',
+      email: 'buraax@gmail',
+      address: 'Pesona Kahuripan 2'),
   CustomersStock(
-    name: 'Buracc',
-    contactNumber: '62866219310',
-    email: 'buracc@gmail',
-    address: 'Pesona Kahuripan 2'
-  ),
+      name: 'Buracc',
+      contactNumber: '62866219310',
+      email: 'buracc@gmail',
+      address: 'Pesona Kahuripan 2'),
 ];
 
 class Customers extends StatelessWidget {
-  const Customers({ Key? key }) : super(key: key);
+  const Customers({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: Colors.white
-      ),
+          borderRadius: BorderRadius.circular(8), color: Colors.white),
       // padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       child: Column(
         children: [
           Container(
-            padding: const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 23),
+            padding:
+                const EdgeInsets.only(top: 16, left: 16, right: 16, bottom: 23),
             child: Row(
               children: [
                 const Expanded(
@@ -90,7 +83,8 @@ class Customers extends StatelessWidget {
                         padding: const EdgeInsets.only(left: 16, right: 16),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all( color: const Color.fromRGBO(240, 241, 243, 1)),
+                          border: Border.all(
+                              color: const Color.fromRGBO(240, 241, 243, 1)),
                         ),
                         child: const Row(
                           children: [
@@ -103,10 +97,10 @@ class Customers extends StatelessWidget {
                             Expanded(
                               child: TextField(
                                 decoration: InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: 'Search customer',
-                                  hintStyle: TextStyle(fontSize: 16, height: 2.8)
-                                ),
+                                    border: InputBorder.none,
+                                    hintText: 'Search customer',
+                                    hintStyle:
+                                        TextStyle(fontSize: 16, height: 2.8)),
                               ),
                             ),
                           ],
@@ -115,21 +109,23 @@ class Customers extends StatelessWidget {
                     ),
                     const SizedBox(width: 14),
                     TextButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(const Color.fromRGBO(19, 102, 217, 1)),
-                        foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                        padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.symmetric(vertical: 20, horizontal: 26))
-                      ),
-                      onPressed: () {
-                        SmartDialog.show(builder: (_) {
-                          return const DialogCustomerFields();
-                        });
-                      },
-                      child: const Text(
-                        'Add Customers',
-                        style: TextStyle(fontSize: 14),
-                      )
-                    ),
+                        style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.all<Color>(
+                                const Color.fromRGBO(19, 102, 217, 1)),
+                            foregroundColor:
+                                MaterialStateProperty.all<Color>(Colors.white),
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                                const EdgeInsets.symmetric(
+                                    vertical: 20, horizontal: 26))),
+                        onPressed: () {
+                          SmartDialog.show(builder: (_) {
+                            return const DialogCustomerFields();
+                          });
+                        },
+                        child: const Text(
+                          'Add Customers',
+                          style: TextStyle(fontSize: 14),
+                        )),
                   ],
                 ),
               ],
@@ -143,50 +139,46 @@ class Customers extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child:
-                  SizedBox(
-                    child: Text('Customer Name',
+                  child: SizedBox(
+                    child: Text(
+                      'Customer Name',
                       style: TextStyle(
-                        fontSize: 14,
-                        color: Color.fromRGBO(102, 112, 133, 1),
-                        fontWeight: FontWeight.w500
-                      ),
+                          fontSize: 14,
+                          color: Color.fromRGBO(102, 112, 133, 1),
+                          fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),
                 Expanded(
-                  child:
-                  SizedBox(
-                    child: Text('Contact Number',
+                  child: SizedBox(
+                    child: Text(
+                      'Contact Number',
                       style: TextStyle(
-                        fontSize: 14,
-                        color: Color.fromRGBO(102, 112, 133, 1),
-                        fontWeight: FontWeight.w500
-                      ),
+                          fontSize: 14,
+                          color: Color.fromRGBO(102, 112, 133, 1),
+                          fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),
                 Expanded(
-                  child:
-                  SizedBox(
-                    child: Text('Email',
+                  child: SizedBox(
+                    child: Text(
+                      'Email',
                       style: TextStyle(
-                        fontSize: 14,
-                        color: Color.fromRGBO(102, 112, 133, 1),
-                        fontWeight: FontWeight.w500
-                      ),
+                          fontSize: 14,
+                          color: Color.fromRGBO(102, 112, 133, 1),
+                          fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),
                 Expanded(
-                  child:
-                  SizedBox(
-                    child: Text('Address',
+                  child: SizedBox(
+                    child: Text(
+                      'Address',
                       style: TextStyle(
-                        fontSize: 14,
-                        color: Color.fromRGBO(102, 112, 133, 1),
-                        fontWeight: FontWeight.w500
-                      ),
+                          fontSize: 14,
+                          color: Color.fromRGBO(102, 112, 133, 1),
+                          fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),
@@ -208,51 +200,47 @@ class Customers extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            child:
-                            SizedBox(
-                              child: Text(products[index].name,
+                            child: SizedBox(
+                              child: Text(
+                                products[index].name,
                                 style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Color.fromRGBO(72, 80, 94, 1),
-                                  fontWeight: FontWeight.w500
-                                ),
+                                    fontSize: 14,
+                                    color: Color.fromRGBO(72, 80, 94, 1),
+                                    fontWeight: FontWeight.w500),
                               ),
                             ),
                           ),
                           Expanded(
-                            child:
-                            SizedBox(
+                            child: SizedBox(
                               width: 110,
-                              child: Text(products[index].contactNumber,
+                              child: Text(
+                                products[index].contactNumber,
                                 style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Color.fromRGBO(72, 80, 94, 1),
-                                  fontWeight: FontWeight.w500
-                                ),
+                                    fontSize: 14,
+                                    color: Color.fromRGBO(72, 80, 94, 1),
+                                    fontWeight: FontWeight.w500),
                               ),
                             ),
                           ),
                           Expanded(
-                            child:
-                            SizedBox(
-                              child: Text(products[index].email,
+                            child: SizedBox(
+                              child: Text(
+                                products[index].email,
                                 style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Color.fromRGBO(72, 80, 94, 1),
-                                  fontWeight: FontWeight.w500
-                                ),
+                                    fontSize: 14,
+                                    color: Color.fromRGBO(72, 80, 94, 1),
+                                    fontWeight: FontWeight.w500),
                               ),
                             ),
                           ),
                           Expanded(
-                            child:
-                            SizedBox(
-                              child: Text(products[index].address,
+                            child: SizedBox(
+                              child: Text(
+                                products[index].address,
                                 style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Color.fromRGBO(72, 80, 94, 1),
-                                  fontWeight: FontWeight.w500
-                                ),
+                                    fontSize: 14,
+                                    color: Color.fromRGBO(72, 80, 94, 1),
+                                    fontWeight: FontWeight.w500),
                               ),
                             ),
                           ),
@@ -275,46 +263,50 @@ class Customers extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextButton(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
-                        side: const BorderSide(color: Color.fromRGBO(208, 211, 217, 1))
-                      )
-                    ),
-                    foregroundColor: MaterialStateProperty.all<Color>(const Color.fromRGBO(72, 80, 94, 1)),
-                    padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.symmetric(vertical: 20, horizontal: 26))
-                  ),
-                  onPressed: () {
-                    // put your code here
-                    // print("heello dere");
-                  },
-                  child: const Text(
-                    'Previous',
-                    style: TextStyle(fontSize: 14),
-                  )
-                ),
+                    style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(4),
+                                    side: const BorderSide(
+                                        color:
+                                            Color.fromRGBO(208, 211, 217, 1)))),
+                        foregroundColor: MaterialStateProperty.all<Color>(
+                            const Color.fromRGBO(72, 80, 94, 1)),
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                            const EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 26))),
+                    onPressed: () {
+                      // put your code here
+                      // print("heello dere");
+                    },
+                    child: const Text(
+                      'Previous',
+                      style: TextStyle(fontSize: 14),
+                    )),
                 const Text('Page 1 of 10'),
                 TextButton(
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(4),
-                        side: const BorderSide(color: Color.fromRGBO(208, 211, 217, 1))
-                      )
-                    ),
-                    foregroundColor: MaterialStateProperty.all<Color>(const Color.fromRGBO(72, 80, 94, 1)),
-                    padding: MaterialStateProperty.all<EdgeInsets>(const EdgeInsets.symmetric(vertical: 20, horizontal: 26))
-                  ),
-                  onPressed: () {
-                    // put your code here
-                    // print("heello dere");
-                  },
-                  child: const Text(
-                    'Next',
-                    style: TextStyle(fontSize: 14),
-                  )
-                ),
+                    style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(4),
+                                    side: const BorderSide(
+                                        color:
+                                            Color.fromRGBO(208, 211, 217, 1)))),
+                        foregroundColor: MaterialStateProperty.all<Color>(
+                            const Color.fromRGBO(72, 80, 94, 1)),
+                        padding: MaterialStateProperty.all<EdgeInsets>(
+                            const EdgeInsets.symmetric(
+                                vertical: 20, horizontal: 26))),
+                    onPressed: () {
+                      // put your code here
+                      // print("heello dere");
+                    },
+                    child: const Text(
+                      'Next',
+                      style: TextStyle(fontSize: 14),
+                    )),
               ],
             ),
           )

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class CustomerField extends StatefulWidget {
+class DialogField extends StatefulWidget {
   final String label;
   final String hintTextField;
   final double height;
 
-  const CustomerField({
+  const DialogField({
     Key? key,
     required this.label,
     required this.hintTextField,
@@ -13,10 +13,10 @@ class CustomerField extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<CustomerField> createState() => _CustomerFieldState();
+  State<DialogField> createState() => _DialogFieldState();
 }
 
-class _CustomerFieldState extends State<CustomerField> {
+class _DialogFieldState extends State<DialogField> {
   final TextEditingController _textController = TextEditingController();
 
   @override
@@ -41,14 +41,18 @@ class _CustomerFieldState extends State<CustomerField> {
             decoration: InputDecoration(
               hintText: widget.hintTextField,
               enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Color.fromRGBO(152, 159, 173, 1), width: 1),
+                borderSide: const BorderSide(
+                    color: Color.fromRGBO(152, 159, 173, 1), width: 1),
                 borderRadius: BorderRadius.circular(8),
               ),
               focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Color.fromRGBO(152, 159, 173, 1), width: 1),
+                borderSide: BorderSide(
+                    color: Color.fromRGBO(152, 159, 173, 1), width: 1),
               ),
-              hintStyle: const TextStyle(fontSize: 16, color: Color.fromRGBO(133, 141, 157, 1)),
-              contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
+              hintStyle: const TextStyle(
+                  fontSize: 16, color: Color.fromRGBO(133, 141, 157, 1)),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
             ),
             style: const TextStyle(fontSize: 16),
           ),

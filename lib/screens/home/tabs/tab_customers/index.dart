@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:mainventori/screens/home/tabs/tab_customers/widgets/customers.dart';
 
 class TabCustomers extends StatelessWidget {
-  const TabCustomers({ Key? key }) : super(key: key);
+  const TabCustomers({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       height: double.infinity,
@@ -13,7 +13,6 @@ class TabCustomers extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 22),
       child: const Column(
         children: [
-          SizedBox(height: 22),
           Expanded(child: Customers()),
         ],
       ),
