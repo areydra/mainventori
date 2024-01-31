@@ -674,16 +674,17 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
       'name', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _expiryDateMeta =
-      const VerificationMeta('expiryDate');
+  static const VerificationMeta _categoryMeta =
+      const VerificationMeta('category');
   @override
-  late final GeneratedColumn<String> expiryDate = GeneratedColumn<String>(
-      'expiry_date', aliasedName, false,
+  late final GeneratedColumn<String> category = GeneratedColumn<String>(
+      'category', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _unitMeta = const VerificationMeta('unit');
+  static const VerificationMeta _supplierMeta =
+      const VerificationMeta('supplier');
   @override
-  late final GeneratedColumn<String> unit = GeneratedColumn<String>(
-      'unit', aliasedName, false,
+  late final GeneratedColumn<String> supplier = GeneratedColumn<String>(
+      'supplier', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
   static const VerificationMeta _buyingPriceMeta =
       const VerificationMeta('buyingPrice');
@@ -697,15 +698,35 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
   late final GeneratedColumn<int> quantity = GeneratedColumn<int>(
       'quantity', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _thresholdVlueMeta =
-      const VerificationMeta('thresholdVlue');
+  static const VerificationMeta _unitMeta = const VerificationMeta('unit');
   @override
-  late final GeneratedColumn<int> thresholdVlue = GeneratedColumn<int>(
-      'threshold_vlue', aliasedName, false,
+  late final GeneratedColumn<String> unit = GeneratedColumn<String>(
+      'unit', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _expiryDateMeta =
+      const VerificationMeta('expiryDate');
+  @override
+  late final GeneratedColumn<String> expiryDate = GeneratedColumn<String>(
+      'expiry_date', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _thresholdValueMeta =
+      const VerificationMeta('thresholdValue');
+  @override
+  late final GeneratedColumn<int> thresholdValue = GeneratedColumn<int>(
+      'threshold_value', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
   @override
-  List<GeneratedColumn> get $columns =>
-      [id, name, expiryDate, unit, buyingPrice, quantity, thresholdVlue];
+  List<GeneratedColumn> get $columns => [
+        id,
+        name,
+        category,
+        supplier,
+        buyingPrice,
+        quantity,
+        unit,
+        expiryDate,
+        thresholdValue
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -725,19 +746,17 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
-    if (data.containsKey('expiry_date')) {
-      context.handle(
-          _expiryDateMeta,
-          expiryDate.isAcceptableOrUnknown(
-              data['expiry_date']!, _expiryDateMeta));
+    if (data.containsKey('category')) {
+      context.handle(_categoryMeta,
+          category.isAcceptableOrUnknown(data['category']!, _categoryMeta));
     } else if (isInserting) {
-      context.missing(_expiryDateMeta);
+      context.missing(_categoryMeta);
     }
-    if (data.containsKey('unit')) {
-      context.handle(
-          _unitMeta, unit.isAcceptableOrUnknown(data['unit']!, _unitMeta));
+    if (data.containsKey('supplier')) {
+      context.handle(_supplierMeta,
+          supplier.isAcceptableOrUnknown(data['supplier']!, _supplierMeta));
     } else if (isInserting) {
-      context.missing(_unitMeta);
+      context.missing(_supplierMeta);
     }
     if (data.containsKey('buying_price')) {
       context.handle(
@@ -753,13 +772,27 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
     } else if (isInserting) {
       context.missing(_quantityMeta);
     }
-    if (data.containsKey('threshold_vlue')) {
+    if (data.containsKey('unit')) {
       context.handle(
-          _thresholdVlueMeta,
-          thresholdVlue.isAcceptableOrUnknown(
-              data['threshold_vlue']!, _thresholdVlueMeta));
+          _unitMeta, unit.isAcceptableOrUnknown(data['unit']!, _unitMeta));
     } else if (isInserting) {
-      context.missing(_thresholdVlueMeta);
+      context.missing(_unitMeta);
+    }
+    if (data.containsKey('expiry_date')) {
+      context.handle(
+          _expiryDateMeta,
+          expiryDate.isAcceptableOrUnknown(
+              data['expiry_date']!, _expiryDateMeta));
+    } else if (isInserting) {
+      context.missing(_expiryDateMeta);
+    }
+    if (data.containsKey('threshold_value')) {
+      context.handle(
+          _thresholdValueMeta,
+          thresholdValue.isAcceptableOrUnknown(
+              data['threshold_value']!, _thresholdValueMeta));
+    } else if (isInserting) {
+      context.missing(_thresholdValueMeta);
     }
     return context;
   }
@@ -774,16 +807,20 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      expiryDate: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}expiry_date'])!,
-      unit: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}unit'])!,
+      category: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}category'])!,
+      supplier: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}supplier'])!,
       buyingPrice: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}buying_price'])!,
       quantity: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}quantity'])!,
-      thresholdVlue: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}threshold_vlue'])!,
+      unit: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}unit'])!,
+      expiryDate: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}expiry_date'])!,
+      thresholdValue: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}threshold_value'])!,
     );
   }
 
@@ -796,29 +833,35 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
 class Product extends DataClass implements Insertable<Product> {
   final int id;
   final String name;
-  final String expiryDate;
-  final String unit;
+  final String category;
+  final String supplier;
   final int buyingPrice;
   final int quantity;
-  final int thresholdVlue;
+  final String unit;
+  final String expiryDate;
+  final int thresholdValue;
   const Product(
       {required this.id,
       required this.name,
-      required this.expiryDate,
-      required this.unit,
+      required this.category,
+      required this.supplier,
       required this.buyingPrice,
       required this.quantity,
-      required this.thresholdVlue});
+      required this.unit,
+      required this.expiryDate,
+      required this.thresholdValue});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
     map['name'] = Variable<String>(name);
-    map['expiry_date'] = Variable<String>(expiryDate);
-    map['unit'] = Variable<String>(unit);
+    map['category'] = Variable<String>(category);
+    map['supplier'] = Variable<String>(supplier);
     map['buying_price'] = Variable<int>(buyingPrice);
     map['quantity'] = Variable<int>(quantity);
-    map['threshold_vlue'] = Variable<int>(thresholdVlue);
+    map['unit'] = Variable<String>(unit);
+    map['expiry_date'] = Variable<String>(expiryDate);
+    map['threshold_value'] = Variable<int>(thresholdValue);
     return map;
   }
 
@@ -826,11 +869,13 @@ class Product extends DataClass implements Insertable<Product> {
     return ProductsCompanion(
       id: Value(id),
       name: Value(name),
-      expiryDate: Value(expiryDate),
-      unit: Value(unit),
+      category: Value(category),
+      supplier: Value(supplier),
       buyingPrice: Value(buyingPrice),
       quantity: Value(quantity),
-      thresholdVlue: Value(thresholdVlue),
+      unit: Value(unit),
+      expiryDate: Value(expiryDate),
+      thresholdValue: Value(thresholdValue),
     );
   }
 
@@ -840,11 +885,13 @@ class Product extends DataClass implements Insertable<Product> {
     return Product(
       id: serializer.fromJson<int>(json['id']),
       name: serializer.fromJson<String>(json['name']),
-      expiryDate: serializer.fromJson<String>(json['expiryDate']),
-      unit: serializer.fromJson<String>(json['unit']),
+      category: serializer.fromJson<String>(json['category']),
+      supplier: serializer.fromJson<String>(json['supplier']),
       buyingPrice: serializer.fromJson<int>(json['buyingPrice']),
       quantity: serializer.fromJson<int>(json['quantity']),
-      thresholdVlue: serializer.fromJson<int>(json['thresholdVlue']),
+      unit: serializer.fromJson<String>(json['unit']),
+      expiryDate: serializer.fromJson<String>(json['expiryDate']),
+      thresholdValue: serializer.fromJson<int>(json['thresholdValue']),
     );
   }
   @override
@@ -853,128 +900,154 @@ class Product extends DataClass implements Insertable<Product> {
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
       'name': serializer.toJson<String>(name),
-      'expiryDate': serializer.toJson<String>(expiryDate),
-      'unit': serializer.toJson<String>(unit),
+      'category': serializer.toJson<String>(category),
+      'supplier': serializer.toJson<String>(supplier),
       'buyingPrice': serializer.toJson<int>(buyingPrice),
       'quantity': serializer.toJson<int>(quantity),
-      'thresholdVlue': serializer.toJson<int>(thresholdVlue),
+      'unit': serializer.toJson<String>(unit),
+      'expiryDate': serializer.toJson<String>(expiryDate),
+      'thresholdValue': serializer.toJson<int>(thresholdValue),
     };
   }
 
   Product copyWith(
           {int? id,
           String? name,
-          String? expiryDate,
-          String? unit,
+          String? category,
+          String? supplier,
           int? buyingPrice,
           int? quantity,
-          int? thresholdVlue}) =>
+          String? unit,
+          String? expiryDate,
+          int? thresholdValue}) =>
       Product(
         id: id ?? this.id,
         name: name ?? this.name,
-        expiryDate: expiryDate ?? this.expiryDate,
-        unit: unit ?? this.unit,
+        category: category ?? this.category,
+        supplier: supplier ?? this.supplier,
         buyingPrice: buyingPrice ?? this.buyingPrice,
         quantity: quantity ?? this.quantity,
-        thresholdVlue: thresholdVlue ?? this.thresholdVlue,
+        unit: unit ?? this.unit,
+        expiryDate: expiryDate ?? this.expiryDate,
+        thresholdValue: thresholdValue ?? this.thresholdValue,
       );
   @override
   String toString() {
     return (StringBuffer('Product(')
           ..write('id: $id, ')
           ..write('name: $name, ')
-          ..write('expiryDate: $expiryDate, ')
-          ..write('unit: $unit, ')
+          ..write('category: $category, ')
+          ..write('supplier: $supplier, ')
           ..write('buyingPrice: $buyingPrice, ')
           ..write('quantity: $quantity, ')
-          ..write('thresholdVlue: $thresholdVlue')
+          ..write('unit: $unit, ')
+          ..write('expiryDate: $expiryDate, ')
+          ..write('thresholdValue: $thresholdValue')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(
-      id, name, expiryDate, unit, buyingPrice, quantity, thresholdVlue);
+  int get hashCode => Object.hash(id, name, category, supplier, buyingPrice,
+      quantity, unit, expiryDate, thresholdValue);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Product &&
           other.id == this.id &&
           other.name == this.name &&
-          other.expiryDate == this.expiryDate &&
-          other.unit == this.unit &&
+          other.category == this.category &&
+          other.supplier == this.supplier &&
           other.buyingPrice == this.buyingPrice &&
           other.quantity == this.quantity &&
-          other.thresholdVlue == this.thresholdVlue);
+          other.unit == this.unit &&
+          other.expiryDate == this.expiryDate &&
+          other.thresholdValue == this.thresholdValue);
 }
 
 class ProductsCompanion extends UpdateCompanion<Product> {
   final Value<int> id;
   final Value<String> name;
-  final Value<String> expiryDate;
-  final Value<String> unit;
+  final Value<String> category;
+  final Value<String> supplier;
   final Value<int> buyingPrice;
   final Value<int> quantity;
-  final Value<int> thresholdVlue;
+  final Value<String> unit;
+  final Value<String> expiryDate;
+  final Value<int> thresholdValue;
   const ProductsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
-    this.expiryDate = const Value.absent(),
-    this.unit = const Value.absent(),
+    this.category = const Value.absent(),
+    this.supplier = const Value.absent(),
     this.buyingPrice = const Value.absent(),
     this.quantity = const Value.absent(),
-    this.thresholdVlue = const Value.absent(),
+    this.unit = const Value.absent(),
+    this.expiryDate = const Value.absent(),
+    this.thresholdValue = const Value.absent(),
   });
   ProductsCompanion.insert({
     this.id = const Value.absent(),
     required String name,
-    required String expiryDate,
-    required String unit,
+    required String category,
+    required String supplier,
     required int buyingPrice,
     required int quantity,
-    required int thresholdVlue,
+    required String unit,
+    required String expiryDate,
+    required int thresholdValue,
   })  : name = Value(name),
-        expiryDate = Value(expiryDate),
-        unit = Value(unit),
+        category = Value(category),
+        supplier = Value(supplier),
         buyingPrice = Value(buyingPrice),
         quantity = Value(quantity),
-        thresholdVlue = Value(thresholdVlue);
+        unit = Value(unit),
+        expiryDate = Value(expiryDate),
+        thresholdValue = Value(thresholdValue);
   static Insertable<Product> custom({
     Expression<int>? id,
     Expression<String>? name,
-    Expression<String>? expiryDate,
-    Expression<String>? unit,
+    Expression<String>? category,
+    Expression<String>? supplier,
     Expression<int>? buyingPrice,
     Expression<int>? quantity,
-    Expression<int>? thresholdVlue,
+    Expression<String>? unit,
+    Expression<String>? expiryDate,
+    Expression<int>? thresholdValue,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
       if (name != null) 'name': name,
-      if (expiryDate != null) 'expiry_date': expiryDate,
-      if (unit != null) 'unit': unit,
+      if (category != null) 'category': category,
+      if (supplier != null) 'supplier': supplier,
       if (buyingPrice != null) 'buying_price': buyingPrice,
       if (quantity != null) 'quantity': quantity,
-      if (thresholdVlue != null) 'threshold_vlue': thresholdVlue,
+      if (unit != null) 'unit': unit,
+      if (expiryDate != null) 'expiry_date': expiryDate,
+      if (thresholdValue != null) 'threshold_value': thresholdValue,
     });
   }
 
   ProductsCompanion copyWith(
       {Value<int>? id,
       Value<String>? name,
-      Value<String>? expiryDate,
-      Value<String>? unit,
+      Value<String>? category,
+      Value<String>? supplier,
       Value<int>? buyingPrice,
       Value<int>? quantity,
-      Value<int>? thresholdVlue}) {
+      Value<String>? unit,
+      Value<String>? expiryDate,
+      Value<int>? thresholdValue}) {
     return ProductsCompanion(
       id: id ?? this.id,
       name: name ?? this.name,
-      expiryDate: expiryDate ?? this.expiryDate,
-      unit: unit ?? this.unit,
+      category: category ?? this.category,
+      supplier: supplier ?? this.supplier,
       buyingPrice: buyingPrice ?? this.buyingPrice,
       quantity: quantity ?? this.quantity,
-      thresholdVlue: thresholdVlue ?? this.thresholdVlue,
+      unit: unit ?? this.unit,
+      expiryDate: expiryDate ?? this.expiryDate,
+      thresholdValue: thresholdValue ?? this.thresholdValue,
     );
   }
 
@@ -987,11 +1060,11 @@ class ProductsCompanion extends UpdateCompanion<Product> {
     if (name.present) {
       map['name'] = Variable<String>(name.value);
     }
-    if (expiryDate.present) {
-      map['expiry_date'] = Variable<String>(expiryDate.value);
+    if (category.present) {
+      map['category'] = Variable<String>(category.value);
     }
-    if (unit.present) {
-      map['unit'] = Variable<String>(unit.value);
+    if (supplier.present) {
+      map['supplier'] = Variable<String>(supplier.value);
     }
     if (buyingPrice.present) {
       map['buying_price'] = Variable<int>(buyingPrice.value);
@@ -999,8 +1072,14 @@ class ProductsCompanion extends UpdateCompanion<Product> {
     if (quantity.present) {
       map['quantity'] = Variable<int>(quantity.value);
     }
-    if (thresholdVlue.present) {
-      map['threshold_vlue'] = Variable<int>(thresholdVlue.value);
+    if (unit.present) {
+      map['unit'] = Variable<String>(unit.value);
+    }
+    if (expiryDate.present) {
+      map['expiry_date'] = Variable<String>(expiryDate.value);
+    }
+    if (thresholdValue.present) {
+      map['threshold_value'] = Variable<int>(thresholdValue.value);
     }
     return map;
   }
@@ -1010,11 +1089,13 @@ class ProductsCompanion extends UpdateCompanion<Product> {
     return (StringBuffer('ProductsCompanion(')
           ..write('id: $id, ')
           ..write('name: $name, ')
-          ..write('expiryDate: $expiryDate, ')
-          ..write('unit: $unit, ')
+          ..write('category: $category, ')
+          ..write('supplier: $supplier, ')
           ..write('buyingPrice: $buyingPrice, ')
           ..write('quantity: $quantity, ')
-          ..write('thresholdVlue: $thresholdVlue')
+          ..write('unit: $unit, ')
+          ..write('expiryDate: $expiryDate, ')
+          ..write('thresholdValue: $thresholdValue')
           ..write(')'))
         .toString();
   }

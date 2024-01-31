@@ -8,6 +8,8 @@ class CustomDialog extends StatefulWidget {
   final String textConfirm;
   final String textCancel;
   final List<Widget> content;
+  final Function onPressConfirm;
+  final Function onPressCancel;
 
   const CustomDialog({
     Key? key,
@@ -17,6 +19,8 @@ class CustomDialog extends StatefulWidget {
     required this.title,
     required this.textConfirm,
     required this.textCancel,
+    required this.onPressConfirm,
+    required this.onPressCancel,
   }) : super(key: key);
 
   @override
@@ -35,73 +39,76 @@ class _CustomDialogState extends State<CustomDialog> {
         borderRadius: BorderRadius.circular(8),
       ),
       padding: const EdgeInsets.symmetric(vertical: 26, horizontal: 28),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Text(
-          widget.title,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-            color: Color.fromRGBO(56, 62, 73, 1),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        home: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          DefaultTextStyle(
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w500,
+              color: Color.fromRGBO(56, 62, 73, 1),
+            ),
+            child: Text(widget.title),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 12, bottom: 32),
-          child: Column(
-            children: [...widget.content],
+          Padding(
+            padding: const EdgeInsets.only(top: 12, bottom: 32),
+            child: Column(
+              children: [...widget.content],
+            ),
           ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Wrap(spacing: 12, children: [
-              ElevatedButton(
-                onPressed: () => SmartDialog.dismiss(),
-                style: ElevatedButton.styleFrom(
-                  elevation: 0,
-                  shadowColor: Colors.transparent,
-                  side: const BorderSide(
-                    width: 1,
-                    color: Color.fromRGBO(133, 141, 157, 1),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Wrap(spacing: 12, children: [
+                ElevatedButton(
+                  onPressed: () => widget.onPressCancel(),
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    shadowColor: Colors.transparent,
+                    side: const BorderSide(
+                      width: 1,
+                      color: Color.fromRGBO(133, 141, 157, 1),
+                    ),
+                    backgroundColor: Colors.white,
                   ),
-                  backgroundColor: Colors.white,
-                ),
-                child: SizedBox(
-                  width: 74,
-                  height: 35,
-                  child: Center(
-                    child: Text(
-                      widget.textCancel,
-                      style: const TextStyle(
-                        color: Color.fromRGBO(133, 141, 157, 1),
+                  child: SizedBox(
+                    width: 74,
+                    height: 35,
+                    child: Center(
+                      child: Text(
+                        widget.textCancel,
+                        style: const TextStyle(
+                          color: Color.fromRGBO(133, 141, 157, 1),
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              ElevatedButton(
-                onPressed: () => SmartDialog.dismiss(),
-                style: ElevatedButton.styleFrom(
-                  elevation: 0,
-                  shadowColor: Colors.transparent,
-                  backgroundColor: const Color.fromRGBO(19, 102, 217, 1),
-                ),
-                child: SizedBox(
-                  width: 95,
-                  height: 35,
-                  child: Center(
-                    child: Text(
-                      widget.textConfirm,
-                      style: const TextStyle(
-                        color: Colors.white,
+                ElevatedButton(
+                  onPressed: () => widget.onPressConfirm(),
+                  style: ElevatedButton.styleFrom(
+                    elevation: 0,
+                    shadowColor: Colors.transparent,
+                    backgroundColor: const Color.fromRGBO(19, 102, 217, 1),
+                  ),
+                  child: SizedBox(
+                    width: 95,
+                    height: 35,
+                    child: Center(
+                      child: Text(
+                        widget.textConfirm,
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ])
-          ],
-        )
-      ]),
+              ])
+            ],
+          )
+        ]),
+      ),
     );
   }
 }
