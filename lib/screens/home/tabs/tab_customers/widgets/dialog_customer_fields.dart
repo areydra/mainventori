@@ -20,6 +20,8 @@ class _DialogState extends State<DialogCustomerFields> {
       title: 'New Customer',
       textConfirm: 'Add Customer',
       textCancel: 'Discard',
+      onPressConfirm: () => {},
+      onPressCancel: () => {},
       content: [
         const SizedBox(height: 12),
         Row(
@@ -52,18 +54,29 @@ class _DialogState extends State<DialogCustomerFields> {
           ],
         ),
         const SizedBox(height: 32),
-        const DialogField(
-            label: 'Customer Name', hintTextField: 'Enter customer name'),
+        DialogField(
+          label: 'Customer Name',
+          hintTextField: 'Enter customer name',
+          textError: '',
+        ),
         const SizedBox(height: 24),
-        const DialogField(
-            label: 'Contact Number',
-            hintTextField: 'Enter customer contact number'),
+        DialogField(
+          label: 'Contact Number',
+          hintTextField: 'Enter customer contact number',
+          textError: '',
+        ),
         const SizedBox(height: 24),
-        const DialogField(
-            label: 'Email', hintTextField: 'Enter customer email'),
+        DialogField(
+          label: 'Email',
+          hintTextField: 'Enter customer email',
+          textError: '',
+        ),
         const SizedBox(height: 24),
-        const DialogField(
-            label: 'Address', hintTextField: 'Enter customer address'),
+        DialogField(
+          label: 'Address',
+          hintTextField: 'Enter customer address',
+          textError: '',
+        ),
       ],
     );
   }
