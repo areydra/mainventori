@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:mainventori/widgets/button.dart';
 
 class CustomDialog extends StatefulWidget {
   final double width;
@@ -50,60 +51,32 @@ class _CustomDialogState extends State<CustomDialog> {
             ),
             child: Text(widget.title),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 12, bottom: 32),
-            child: Column(
-              children: [...widget.content],
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 12, bottom: 32),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [...widget.content],
+              ),
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Wrap(spacing: 12, children: [
-                ElevatedButton(
-                  onPressed: () => widget.onPressCancel(),
-                  style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    shadowColor: Colors.transparent,
-                    side: const BorderSide(
-                      width: 1,
-                      color: Color.fromRGBO(133, 141, 157, 1),
-                    ),
-                    backgroundColor: Colors.white,
-                  ),
-                  child: SizedBox(
-                    width: 74,
-                    height: 35,
-                    child: Center(
-                      child: Text(
-                        widget.textCancel,
-                        style: const TextStyle(
-                          color: Color.fromRGBO(133, 141, 157, 1),
-                        ),
-                      ),
-                    ),
-                  ),
+                Button(
+                  onPress: () => widget.onPressCancel(),
+                  text: widget.textCancel,
+                  backgroundColor: Colors.white,
+                  borderColor: const Color.fromRGBO(133, 141, 157, 1),
+                  textColor: const Color.fromRGBO(133, 141, 157, 1),
                 ),
-                ElevatedButton(
-                  onPressed: () => widget.onPressConfirm(),
-                  style: ElevatedButton.styleFrom(
-                    elevation: 0,
-                    shadowColor: Colors.transparent,
-                    backgroundColor: const Color.fromRGBO(19, 102, 217, 1),
-                  ),
-                  child: SizedBox(
-                    width: 95,
-                    height: 35,
-                    child: Center(
-                      child: Text(
-                        widget.textConfirm,
-                        style: const TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                Button(
+                  onPress: () => widget.onPressConfirm(),
+                  text: widget.textConfirm,
+                  backgroundColor: const Color.fromRGBO(19, 102, 217, 1),
+                  textColor: Colors.white,
+                )
               ])
             ],
           )

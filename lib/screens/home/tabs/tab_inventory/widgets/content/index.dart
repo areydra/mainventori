@@ -36,8 +36,8 @@ class _ContentInventoryState extends State<ContentInventory> {
     });
   }
 
-  Future<void> addNewProduct(Product product) async {
-    List<Product> newProducts = [product, ...products];
+  Future<void> addNewProducts(List<Product> productList) async {
+    List<Product> newProducts = [...productList, ...products];
 
     if (newProducts.length > limitPerPage) {
       newProducts.removeLast();
@@ -73,7 +73,7 @@ class _ContentInventoryState extends State<ContentInventory> {
       // padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       child: Column(
         children: [
-          Header(addNewProduct: addNewProduct),
+          Header(addNewProducts: addNewProducts),
           const ProductListHeader(),
           ProductsListContent(products: products),
           Footer(

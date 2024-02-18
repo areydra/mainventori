@@ -1,20 +1,24 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
-import 'package:dotted_border/dotted_border.dart';
+import 'package:drift/drift.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:intl/intl.dart';
 import 'package:mainventori/database/index.dart';
+import 'package:mainventori/screens/home/tabs/tab_inventory/models/product_list_controller.dart';
+import 'package:mainventori/screens/home/tabs/tab_inventory/widgets/content/widget/add_new_product_dialog_header.dart';
+import 'package:mainventori/widgets/button.dart';
 import 'package:mainventori/widgets/custom_dialog/index.dart';
-import 'package:mainventori/widgets/custom_dialog/widgets/dialog_date_picker.dart';
-import 'package:mainventori/widgets/custom_dialog/widgets/dialog_dropdown.dart';
-import 'package:mainventori/widgets/custom_dialog/widgets/dialog_field.dart';
+import 'package:mainventori/widgets/date_picker.dart';
+import 'package:mainventori/widgets/dropdown.dart';
+import 'package:mainventori/widgets/text_input.dart';
 
 class AddNewProductDialog extends StatefulWidget {
-  final Function addNewProduct;
+  final Function addNewProducts;
 
   const AddNewProductDialog({
     Key? key,
-    required this.addNewProduct,
+    required this.addNewProducts,
   }) : super(key: key);
 
   @override
@@ -36,201 +40,436 @@ class _AddNewProductDialogState extends State<AddNewProductDialog> {
     "thresholdValue": null,
   };
 
-  TextEditingController textCategory = TextEditingController();
-  TextEditingController textProductName = TextEditingController();
-  TextEditingController textSupplier = TextEditingController();
-  TextEditingController textBuyingPrice = TextEditingController();
-  TextEditingController textQuantity = TextEditingController();
-  TextEditingController textUnit = TextEditingController();
-  TextEditingController textExpiryDate = TextEditingController();
-  TextEditingController textThresholdValue = TextEditingController();
+  List<ProductListController> listController = [
+    ProductListController(
+      code: TextEditingController(),
+      name: TextEditingController(),
+      category: TextEditingController(),
+      supplier: TextEditingController(),
+      buyingPrice: TextEditingController(),
+      quantity: TextEditingController(),
+      unit: TextEditingController(),
+      dateIn: TextEditingController(),
+      minStock: TextEditingController(),
+    )
+  ];
+
+  List<List<String>> listControllerError = [
+    [
+      'code',
+      'name',
+      'category',
+      'supplier',
+      'buyingPrice',
+      'quantity',
+      'unit',
+      'dateIn',
+      'minStock',
+    ]
+  ];
+
+  List<String> shouldCheckValidationByFieldIndex = [];
+  bool isSaving = false;
 
   bool validation() {
     bool isFieldValid = true;
 
-    setState(() {
-      if (textCategory.text.isEmpty ||
-          textProductName.text.isEmpty ||
-          textSupplier.text.isEmpty ||
-          textBuyingPrice.text.isEmpty ||
-          textQuantity.text.isEmpty ||
-          textUnit.text.isEmpty ||
-          textExpiryDate.text.isEmpty ||
-          textThresholdValue.text.isEmpty) {
+    for (int index = 0; index < listControllerError.length; index++) {
+      var value = listControllerError[index];
+      if (value.isNotEmpty && isFieldValid) {
         isFieldValid = false;
-      } else {
-        isFieldValid = true;
       }
 
-      textError["category"] =
-          textCategory.text.isEmpty ? "Category cannot be null!" : null;
-      textError["productName"] =
-          textProductName.text.isEmpty ? "Product name cannot be null!" : null;
-      textError["supplier"] =
-          textSupplier.text.isEmpty ? "Supplier cannot be null!" : null;
-      textError["buyingPrice"] =
-          textBuyingPrice.text.isEmpty ? "Buying price cannot be null!" : null;
-      textError["quantity"] =
-          textQuantity.text.isEmpty ? "Quantity cannot be null!" : null;
-      textError["unit"] = textUnit.text.isEmpty ? "Unit cannot be null!" : null;
-      textError["expiryDate"] =
-          textExpiryDate.text.isEmpty ? "Expiry date cannot be null!" : null;
-      textError["thresholdValue"] =
-          textThresholdValue.text.isEmpty ? "Threshold cannot be null!" : null;
-    });
+      if (value.isNotEmpty &&
+          !shouldCheckValidationByFieldIndex.contains(index.toString())) {
+        setState(() {
+          shouldCheckValidationByFieldIndex.add(index.toString());
+        });
+      }
+    }
 
     return isFieldValid;
   }
 
-  saveProduct() async {
-    if (!validation()) {
-      return;
-    }
-    // save product into database
-    final id =
-        await database.into(database.products).insert(ProductsCompanion.insert(
-              name: textProductName.text,
-              expiryDate: textExpiryDate.text,
-              unit: textUnit.text,
-              buyingPrice: int.tryParse(textBuyingPrice.text) ?? 0,
-              quantity: int.tryParse(textQuantity.text) ?? 0,
-              thresholdValue: int.tryParse(textThresholdValue.text) ?? 0,
-              category: textCategory.text,
-              supplier: textSupplier.text,
-            ));
-
-    // save product into state
-    widget.addNewProduct(Product(
-      id: id,
-      name: textProductName.text,
-      expiryDate: textExpiryDate.text,
-      unit: textUnit.text,
-      buyingPrice: int.tryParse(textBuyingPrice.text) ?? 0,
-      quantity: int.tryParse(textQuantity.text) ?? 0,
-      thresholdValue: int.tryParse(textThresholdValue.text) ?? 0,
-      category: textCategory.text,
-      supplier: textSupplier.text,
-    ));
-
-    SmartDialog.dismiss();
+  void onChangeValue(int index, String key) {
+    setState(() {
+      switch (key) {
+        case 'code':
+          if (listController[index].code.text.isEmpty) {
+            if (!listControllerError[index].contains('code')) {
+              listControllerError[index].add('code');
+            }
+          } else {
+            if (listControllerError[index].contains('code')) {
+              listControllerError[index].remove('code');
+            }
+          }
+          break;
+        case 'name':
+          if (listController[index].name.text.isEmpty) {
+            if (!listControllerError[index].contains('name')) {
+              listControllerError[index].add('name');
+            }
+          } else {
+            if (listControllerError[index].contains('name')) {
+              listControllerError[index].remove('name');
+            }
+          }
+          break;
+        case 'category':
+          if (listController[index].category.text.isEmpty) {
+            if (!listControllerError[index].contains('category')) {
+              listControllerError[index].add('category');
+            }
+          } else {
+            if (listControllerError[index].contains('category')) {
+              listControllerError[index].remove('category');
+            }
+          }
+          break;
+        case 'supplier':
+          if (listController[index].supplier.text.isEmpty) {
+            if (!listControllerError[index].contains('supplier')) {
+              listControllerError[index].add('supplier');
+            }
+          } else {
+            if (listControllerError[index].contains('supplier')) {
+              listControllerError[index].remove('supplier');
+            }
+          }
+          break;
+        case 'buyingPrice':
+          if (listController[index].buyingPrice.text.isEmpty) {
+            if (!listControllerError[index].contains('buyingPrice')) {
+              listControllerError[index].add('buyingPrice');
+            }
+          } else {
+            if (listControllerError[index].contains('buyingPrice')) {
+              listControllerError[index].remove('buyingPrice');
+            }
+          }
+          break;
+        case 'quantity':
+          if (listController[index].quantity.text.isEmpty) {
+            if (!listControllerError[index].contains('quantity')) {
+              listControllerError[index].add('quantity');
+            }
+          } else {
+            if (listControllerError[index].contains('quantity')) {
+              listControllerError[index].remove('quantity');
+            }
+          }
+          break;
+        case 'unit':
+          if (listController[index].unit.text.isEmpty) {
+            if (!listControllerError[index].contains('unit')) {
+              listControllerError[index].add('unit');
+            }
+          } else {
+            if (listControllerError[index].contains('unit')) {
+              listControllerError[index].remove('unit');
+            }
+          }
+          break;
+        case 'dateIn':
+          if (listController[index].dateIn.text.isEmpty) {
+            if (!listControllerError[index].contains('dateIn')) {
+              listControllerError[index].add('dateIn');
+            }
+          } else {
+            if (listControllerError[index].contains('dateIn')) {
+              listControllerError[index].remove('dateIn');
+            }
+          }
+          break;
+        case 'minStock':
+          if (listController[index].minStock.text.isEmpty) {
+            if (!listControllerError[index].contains('minStock')) {
+              listControllerError[index].add('minStock');
+            }
+          } else {
+            if (listControllerError[index].contains('minStock')) {
+              listControllerError[index].remove('minStock');
+            }
+          }
+          break;
+      }
+    });
   }
 
-  void onChangeValue(dynamic key) {
+  void onPressConfirm() async {
     setState(() {
-      textError[key] = null;
+      isSaving = true;
+    });
+    if (!validation()) {
+      setState(() {
+        isSaving = false;
+      });
+      return;
+    }
+
+    List<ProductsCompanion> products = [];
+    DateFormat dateFormat = DateFormat("dd MMMM yyyy");
+
+    for (var value in listController) {
+      products.add(
+        ProductsCompanion(
+          code: Value(value.code.text),
+          name: Value(value.name.text),
+          category: Value(value.category.text),
+          supplier: Value(value.supplier.text),
+          buyingPrice: Value(int.parse(value.buyingPrice.text)),
+          quantity: Value(int.parse(value.quantity.text)),
+          unit: Value(value.unit.text),
+          dateIn: Value(dateFormat.parse(value.dateIn.text)),
+          minStock: Value(int.parse(value.minStock.text)),
+        ),
+      );
+    }
+
+    await database.batch((batch) {
+      batch.insertAll(database.products, products);
+    }).then((_) async {
+      final lastInsertedRecord = await (database.select(database.products)
+            ..orderBy([
+              (t) => OrderingTerm(expression: t.id, mode: OrderingMode.desc)
+            ])
+            ..limit(products.length))
+          .get();
+
+      widget.addNewProducts(lastInsertedRecord);
+      SmartDialog.dismiss();
+    }).catchError((error) async {
+      for (int index = 0; index < products.length; index++) {
+        if (!listControllerError[index].contains('code')) {
+          listControllerError[index].add('code');
+          if (!shouldCheckValidationByFieldIndex.contains(index.toString())) {
+            setState(() {
+              shouldCheckValidationByFieldIndex.add(index.toString());
+            });
+          }
+        }
+      }
+      SmartDialog.show(builder: (context) {
+        return Container(
+          height: 150,
+          width: 350,
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          alignment: Alignment.center,
+          child: const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: Text(
+              'Kode produk yang baru ditambahkan atau yang sudah disimpan harus unik. Mohon pastikan tidak ada duplikasi dalam kode produk!',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        );
+      });
+    }).whenComplete(() {
+      setState(() {
+        isSaving = false;
+      });
+    });
+  }
+
+  void onPressAddItem() {
+    setState(() {
+      listController.add(ProductListController(
+        code: TextEditingController(),
+        name: TextEditingController(),
+        category: TextEditingController(),
+        supplier: TextEditingController(),
+        buyingPrice: TextEditingController(),
+        quantity: TextEditingController(),
+        unit: TextEditingController(),
+        dateIn: TextEditingController(),
+        minStock: TextEditingController(),
+      ));
+      listControllerError.add([
+        'code',
+        'name',
+        'category',
+        'supplier',
+        'buyingPrice',
+        'quantity',
+        'unit',
+        'dateIn',
+        'minStock',
+      ]);
+    });
+  }
+
+  void onPressDeleteItem(int index) {
+    setState(() {
+      listController.removeAt(index);
+      listControllerError.removeAt(index);
+      shouldCheckValidationByFieldIndex.remove(index.toString());
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return CustomDialog(
-      width: 500,
-      height: 945,
+      width: 1505,
+      height: 980,
       title: 'New Product',
-      textConfirm: 'Add Product',
+      textConfirm: isSaving ? 'Adding Product..' : 'Add Product',
       textCancel: 'Discard',
-      onPressConfirm: saveProduct,
+      onPressConfirm: onPressConfirm,
       onPressCancel: SmartDialog.dismiss,
       content: [
-        const SizedBox(height: 12),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            DottedBorder(
-              borderType: BorderType.RRect,
-              dashPattern: const [6],
-              color: const Color.fromRGBO(157, 157, 157, 1),
-              radius: const Radius.circular(10),
-              child: const SizedBox(
-                width: 80,
-                height: 80,
-              ),
+        const AddNewProductDialogHeader(),
+        LayoutBuilder(builder: (context, constraints) {
+          return ConstrainedBox(
+            constraints: const BoxConstraints(
+              maxHeight: 680, // Set the maximum height here
             ),
-            const SizedBox(width: 20),
-            const Column(children: [
-              DefaultTextStyle(
-                style: TextStyle(color: Color.fromRGBO(133, 141, 157, 1)),
-                child: Text('Drag image here'),
-              ),
-              DefaultTextStyle(
-                style: TextStyle(color: Color.fromRGBO(133, 141, 157, 1)),
-                child: Text('or'),
-              ),
-              DefaultTextStyle(
-                style: TextStyle(color: Color.fromRGBO(68, 141, 242, 1)),
-                child: Text('Browse image'),
-              ),
-            ])
-          ],
-        ),
-        const SizedBox(height: 32),
-        DialogField(
-          label: 'Product Name',
-          hintTextField: 'Enter product name',
-          textController: textProductName,
-          textError: textError["productName"],
-          onChangeValue: (_) => onChangeValue("productName"),
-        ),
-        const SizedBox(height: 24),
-        DialogDropdown(
-          label: 'Category',
-          hintTextField: 'Select product category',
-          dropdownItems: const ['Drink', 'Food'],
-          textError: textError["category"],
-          selectedValue: textCategory,
-          onChangeValue: (_) => onChangeValue("category"),
-        ),
-        const SizedBox(height: 24),
-        DialogField(
-          label: 'Supplier',
-          hintTextField: 'Select supplier',
-          textController: textSupplier,
-          textError: textError["supplier"],
-          onChangeValue: (_) => onChangeValue("supplier"),
-        ),
-        const SizedBox(height: 24),
-        DialogField(
-          label: 'Buying Price',
-          hintTextField: 'Enter buying price',
-          textController: textBuyingPrice,
-          textError: textError["buyingPrice"],
-          onChangeValue: (_) => onChangeValue("buyingPrice"),
-          fieldType: FieldType.number,
-        ),
-        const SizedBox(height: 24),
-        DialogField(
-          label: 'Quantity',
-          hintTextField: 'Enter product quantity',
-          textController: textQuantity,
-          textError: textError["quantity"],
-          onChangeValue: (_) => onChangeValue("quantity"),
-          fieldType: FieldType.number,
-        ),
-        const SizedBox(height: 24),
-        DialogField(
-          label: 'Unit',
-          hintTextField: 'Enter product unit',
-          textController: textUnit,
-          textError: textError["unit"],
-          onChangeValue: (_) => onChangeValue("unit"),
-        ),
-        const SizedBox(height: 24),
-        DialogDatePicker(
-          label: 'Expiry Date',
-          hintTextField: 'Select product date',
-          textController: textExpiryDate,
-          textError: textError["expiryDate"],
-          onChangeValue: (_) => onChangeValue("expiryDate"),
-        ),
-        const SizedBox(height: 24),
-        DialogField(
-          label: 'Threshold Value',
-          hintTextField: 'Enter threshold value',
-          textController: textThresholdValue,
-          textError: textError["thresholdValue"],
-          onChangeValue: (_) => onChangeValue("thresholdValue"),
-          fieldType: FieldType.number,
-        ),
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: listController.length,
+              itemBuilder: (context, index) {
+                return Row(
+                  children: [
+                    TextInput(
+                      label: '',
+                      hintTextField: 'Kode Produk',
+                      textController: listController[index].code,
+                      isError: shouldCheckValidationByFieldIndex
+                              .contains(index.toString())
+                          ? listControllerError[index].contains('code')
+                          : false,
+                      onChangeValue: (_) => onChangeValue(index, "code"),
+                      width: 130,
+                    ),
+                    const SizedBox(width: 8),
+                    TextInput(
+                      label: '',
+                      hintTextField: 'Nama Produk',
+                      textController: listController[index].name,
+                      isError: shouldCheckValidationByFieldIndex
+                              .contains(index.toString())
+                          ? listControllerError[index].contains('name')
+                          : false,
+                      onChangeValue: (_) => onChangeValue(index, "name"),
+                      width: 200,
+                    ),
+                    const SizedBox(width: 8),
+                    Dropdown(
+                      label: '',
+                      hintTextField: 'Pilih Kategori',
+                      dropdownItems: const ['Drink', 'Food'],
+                      isError: shouldCheckValidationByFieldIndex
+                              .contains(index.toString())
+                          ? listControllerError[index].contains('category')
+                          : false,
+                      selectedValue: listController[index].category,
+                      onChangeValue: (_) => onChangeValue(index, "category"),
+                    ),
+                    const SizedBox(width: 8),
+                    Dropdown(
+                      label: '',
+                      hintTextField: 'Pilih supplier',
+                      dropdownItems: const ['MaFood', 'MaDrink'],
+                      selectedValue: listController[index].supplier,
+                      isError: shouldCheckValidationByFieldIndex
+                              .contains(index.toString())
+                          ? listControllerError[index].contains('supplier')
+                          : false,
+                      onChangeValue: (_) => onChangeValue(index, "supplier"),
+                    ),
+                    const SizedBox(width: 8),
+                    TextInput(
+                      label: '',
+                      hintTextField: '0',
+                      textController: listController[index].buyingPrice,
+                      isError: shouldCheckValidationByFieldIndex
+                              .contains(index.toString())
+                          ? listControllerError[index].contains('buyingPrice')
+                          : false,
+                      onChangeValue: (_) => onChangeValue(index, "buyingPrice"),
+                      fieldType: CustomTextInputType.number,
+                      width: 200,
+                    ),
+                    const SizedBox(width: 8),
+                    TextInput(
+                      label: '',
+                      hintTextField: '0',
+                      textController: listController[index].quantity,
+                      isError: shouldCheckValidationByFieldIndex
+                              .contains(index.toString())
+                          ? listControllerError[index].contains('quantity')
+                          : false,
+                      onChangeValue: (_) => onChangeValue(index, "quantity"),
+                      fieldType: CustomTextInputType.number,
+                      width: 100,
+                    ),
+                    const SizedBox(width: 8),
+                    TextInput(
+                      label: '',
+                      hintTextField: '0',
+                      textController: listController[index].minStock,
+                      isError: shouldCheckValidationByFieldIndex
+                              .contains(index.toString())
+                          ? listControllerError[index].contains('minStock')
+                          : false,
+                      onChangeValue: (_) => onChangeValue(index, "minStock"),
+                      fieldType: CustomTextInputType.number,
+                      width: 100,
+                    ),
+                    const SizedBox(width: 8),
+                    TextInput(
+                      label: '',
+                      hintTextField: 'Unit',
+                      textController: listController[index].unit,
+                      isError: shouldCheckValidationByFieldIndex
+                              .contains(index.toString())
+                          ? listControllerError[index].contains('unit')
+                          : false,
+                      onChangeValue: (_) => onChangeValue(index, "unit"),
+                      width: 100,
+                    ),
+                    const SizedBox(width: 8),
+                    DatePicker(
+                      label: '',
+                      hintTextField: 'Pilh tanggal',
+                      textController: listController[index].dateIn,
+                      isError: shouldCheckValidationByFieldIndex
+                              .contains(index.toString())
+                          ? listControllerError[index].contains('dateIn')
+                          : false,
+                      onChangeValue: (_) => onChangeValue(index, "dateIn"),
+                      width: 200,
+                    ),
+                    const SizedBox(width: 8),
+                    IconButton(
+                      onPressed: listController.length > 1
+                          ? () {
+                              onPressDeleteItem(index);
+                            }
+                          : null,
+                      icon: Icon(
+                        Icons.delete,
+                        color: listController.length > 1
+                            ? const Color.fromRGBO(218, 62, 51, 1)
+                            : const Color.fromRGBO(102, 112, 133, 1),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
+          );
+        }),
+        const SizedBox(height: 10),
+        Button(
+          onPress: onPressAddItem,
+          text: 'Add Item',
+          backgroundColor: const Color.fromRGBO(19, 102, 217, 1),
+          textColor: Colors.white,
+        )
       ],
     );
   }

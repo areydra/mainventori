@@ -669,6 +669,13 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _codeMeta = const VerificationMeta('code');
+  @override
+  late final GeneratedColumn<String> code = GeneratedColumn<String>(
+      'code', aliasedName, false,
+      type: DriftSqlType.string,
+      requiredDuringInsert: true,
+      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
@@ -703,29 +710,29 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
   late final GeneratedColumn<String> unit = GeneratedColumn<String>(
       'unit', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _expiryDateMeta =
-      const VerificationMeta('expiryDate');
+  static const VerificationMeta _dateInMeta = const VerificationMeta('dateIn');
   @override
-  late final GeneratedColumn<String> expiryDate = GeneratedColumn<String>(
-      'expiry_date', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _thresholdValueMeta =
-      const VerificationMeta('thresholdValue');
+  late final GeneratedColumn<DateTime> dateIn = GeneratedColumn<DateTime>(
+      'date_in', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _minStockMeta =
+      const VerificationMeta('minStock');
   @override
-  late final GeneratedColumn<int> thresholdValue = GeneratedColumn<int>(
-      'threshold_value', aliasedName, false,
+  late final GeneratedColumn<int> minStock = GeneratedColumn<int>(
+      'min_stock', aliasedName, false,
       type: DriftSqlType.int, requiredDuringInsert: true);
   @override
   List<GeneratedColumn> get $columns => [
         id,
+        code,
         name,
         category,
         supplier,
         buyingPrice,
         quantity,
         unit,
-        expiryDate,
-        thresholdValue
+        dateIn,
+        minStock
       ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -739,6 +746,12 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
     final data = instance.toColumns(true);
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('code')) {
+      context.handle(
+          _codeMeta, code.isAcceptableOrUnknown(data['code']!, _codeMeta));
+    } else if (isInserting) {
+      context.missing(_codeMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
@@ -778,21 +791,17 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
     } else if (isInserting) {
       context.missing(_unitMeta);
     }
-    if (data.containsKey('expiry_date')) {
-      context.handle(
-          _expiryDateMeta,
-          expiryDate.isAcceptableOrUnknown(
-              data['expiry_date']!, _expiryDateMeta));
+    if (data.containsKey('date_in')) {
+      context.handle(_dateInMeta,
+          dateIn.isAcceptableOrUnknown(data['date_in']!, _dateInMeta));
     } else if (isInserting) {
-      context.missing(_expiryDateMeta);
+      context.missing(_dateInMeta);
     }
-    if (data.containsKey('threshold_value')) {
-      context.handle(
-          _thresholdValueMeta,
-          thresholdValue.isAcceptableOrUnknown(
-              data['threshold_value']!, _thresholdValueMeta));
+    if (data.containsKey('min_stock')) {
+      context.handle(_minStockMeta,
+          minStock.isAcceptableOrUnknown(data['min_stock']!, _minStockMeta));
     } else if (isInserting) {
-      context.missing(_thresholdValueMeta);
+      context.missing(_minStockMeta);
     }
     return context;
   }
@@ -805,6 +814,8 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
     return Product(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      code: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}code'])!,
       name: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
       category: attachedDatabase.typeMapping
@@ -817,10 +828,10 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
           .read(DriftSqlType.int, data['${effectivePrefix}quantity'])!,
       unit: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}unit'])!,
-      expiryDate: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}expiry_date'])!,
-      thresholdValue: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}threshold_value'])!,
+      dateIn: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}date_in'])!,
+      minStock: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}min_stock'])!,
     );
   }
 
@@ -832,50 +843,54 @@ class $ProductsTable extends Products with TableInfo<$ProductsTable, Product> {
 
 class Product extends DataClass implements Insertable<Product> {
   final int id;
+  final String code;
   final String name;
   final String category;
   final String supplier;
   final int buyingPrice;
   final int quantity;
   final String unit;
-  final String expiryDate;
-  final int thresholdValue;
+  final DateTime dateIn;
+  final int minStock;
   const Product(
       {required this.id,
+      required this.code,
       required this.name,
       required this.category,
       required this.supplier,
       required this.buyingPrice,
       required this.quantity,
       required this.unit,
-      required this.expiryDate,
-      required this.thresholdValue});
+      required this.dateIn,
+      required this.minStock});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
+    map['code'] = Variable<String>(code);
     map['name'] = Variable<String>(name);
     map['category'] = Variable<String>(category);
     map['supplier'] = Variable<String>(supplier);
     map['buying_price'] = Variable<int>(buyingPrice);
     map['quantity'] = Variable<int>(quantity);
     map['unit'] = Variable<String>(unit);
-    map['expiry_date'] = Variable<String>(expiryDate);
-    map['threshold_value'] = Variable<int>(thresholdValue);
+    map['date_in'] = Variable<DateTime>(dateIn);
+    map['min_stock'] = Variable<int>(minStock);
     return map;
   }
 
   ProductsCompanion toCompanion(bool nullToAbsent) {
     return ProductsCompanion(
       id: Value(id),
+      code: Value(code),
       name: Value(name),
       category: Value(category),
       supplier: Value(supplier),
       buyingPrice: Value(buyingPrice),
       quantity: Value(quantity),
       unit: Value(unit),
-      expiryDate: Value(expiryDate),
-      thresholdValue: Value(thresholdValue),
+      dateIn: Value(dateIn),
+      minStock: Value(minStock),
     );
   }
 
@@ -884,14 +899,15 @@ class Product extends DataClass implements Insertable<Product> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Product(
       id: serializer.fromJson<int>(json['id']),
+      code: serializer.fromJson<String>(json['code']),
       name: serializer.fromJson<String>(json['name']),
       category: serializer.fromJson<String>(json['category']),
       supplier: serializer.fromJson<String>(json['supplier']),
       buyingPrice: serializer.fromJson<int>(json['buyingPrice']),
       quantity: serializer.fromJson<int>(json['quantity']),
       unit: serializer.fromJson<String>(json['unit']),
-      expiryDate: serializer.fromJson<String>(json['expiryDate']),
-      thresholdValue: serializer.fromJson<int>(json['thresholdValue']),
+      dateIn: serializer.fromJson<DateTime>(json['dateIn']),
+      minStock: serializer.fromJson<int>(json['minStock']),
     );
   }
   @override
@@ -899,155 +915,168 @@ class Product extends DataClass implements Insertable<Product> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
+      'code': serializer.toJson<String>(code),
       'name': serializer.toJson<String>(name),
       'category': serializer.toJson<String>(category),
       'supplier': serializer.toJson<String>(supplier),
       'buyingPrice': serializer.toJson<int>(buyingPrice),
       'quantity': serializer.toJson<int>(quantity),
       'unit': serializer.toJson<String>(unit),
-      'expiryDate': serializer.toJson<String>(expiryDate),
-      'thresholdValue': serializer.toJson<int>(thresholdValue),
+      'dateIn': serializer.toJson<DateTime>(dateIn),
+      'minStock': serializer.toJson<int>(minStock),
     };
   }
 
   Product copyWith(
           {int? id,
+          String? code,
           String? name,
           String? category,
           String? supplier,
           int? buyingPrice,
           int? quantity,
           String? unit,
-          String? expiryDate,
-          int? thresholdValue}) =>
+          DateTime? dateIn,
+          int? minStock}) =>
       Product(
         id: id ?? this.id,
+        code: code ?? this.code,
         name: name ?? this.name,
         category: category ?? this.category,
         supplier: supplier ?? this.supplier,
         buyingPrice: buyingPrice ?? this.buyingPrice,
         quantity: quantity ?? this.quantity,
         unit: unit ?? this.unit,
-        expiryDate: expiryDate ?? this.expiryDate,
-        thresholdValue: thresholdValue ?? this.thresholdValue,
+        dateIn: dateIn ?? this.dateIn,
+        minStock: minStock ?? this.minStock,
       );
   @override
   String toString() {
     return (StringBuffer('Product(')
           ..write('id: $id, ')
+          ..write('code: $code, ')
           ..write('name: $name, ')
           ..write('category: $category, ')
           ..write('supplier: $supplier, ')
           ..write('buyingPrice: $buyingPrice, ')
           ..write('quantity: $quantity, ')
           ..write('unit: $unit, ')
-          ..write('expiryDate: $expiryDate, ')
-          ..write('thresholdValue: $thresholdValue')
+          ..write('dateIn: $dateIn, ')
+          ..write('minStock: $minStock')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(id, name, category, supplier, buyingPrice,
-      quantity, unit, expiryDate, thresholdValue);
+  int get hashCode => Object.hash(id, code, name, category, supplier,
+      buyingPrice, quantity, unit, dateIn, minStock);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Product &&
           other.id == this.id &&
+          other.code == this.code &&
           other.name == this.name &&
           other.category == this.category &&
           other.supplier == this.supplier &&
           other.buyingPrice == this.buyingPrice &&
           other.quantity == this.quantity &&
           other.unit == this.unit &&
-          other.expiryDate == this.expiryDate &&
-          other.thresholdValue == this.thresholdValue);
+          other.dateIn == this.dateIn &&
+          other.minStock == this.minStock);
 }
 
 class ProductsCompanion extends UpdateCompanion<Product> {
   final Value<int> id;
+  final Value<String> code;
   final Value<String> name;
   final Value<String> category;
   final Value<String> supplier;
   final Value<int> buyingPrice;
   final Value<int> quantity;
   final Value<String> unit;
-  final Value<String> expiryDate;
-  final Value<int> thresholdValue;
+  final Value<DateTime> dateIn;
+  final Value<int> minStock;
   const ProductsCompanion({
     this.id = const Value.absent(),
+    this.code = const Value.absent(),
     this.name = const Value.absent(),
     this.category = const Value.absent(),
     this.supplier = const Value.absent(),
     this.buyingPrice = const Value.absent(),
     this.quantity = const Value.absent(),
     this.unit = const Value.absent(),
-    this.expiryDate = const Value.absent(),
-    this.thresholdValue = const Value.absent(),
+    this.dateIn = const Value.absent(),
+    this.minStock = const Value.absent(),
   });
   ProductsCompanion.insert({
     this.id = const Value.absent(),
+    required String code,
     required String name,
     required String category,
     required String supplier,
     required int buyingPrice,
     required int quantity,
     required String unit,
-    required String expiryDate,
-    required int thresholdValue,
-  })  : name = Value(name),
+    required DateTime dateIn,
+    required int minStock,
+  })  : code = Value(code),
+        name = Value(name),
         category = Value(category),
         supplier = Value(supplier),
         buyingPrice = Value(buyingPrice),
         quantity = Value(quantity),
         unit = Value(unit),
-        expiryDate = Value(expiryDate),
-        thresholdValue = Value(thresholdValue);
+        dateIn = Value(dateIn),
+        minStock = Value(minStock);
   static Insertable<Product> custom({
     Expression<int>? id,
+    Expression<String>? code,
     Expression<String>? name,
     Expression<String>? category,
     Expression<String>? supplier,
     Expression<int>? buyingPrice,
     Expression<int>? quantity,
     Expression<String>? unit,
-    Expression<String>? expiryDate,
-    Expression<int>? thresholdValue,
+    Expression<DateTime>? dateIn,
+    Expression<int>? minStock,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
+      if (code != null) 'code': code,
       if (name != null) 'name': name,
       if (category != null) 'category': category,
       if (supplier != null) 'supplier': supplier,
       if (buyingPrice != null) 'buying_price': buyingPrice,
       if (quantity != null) 'quantity': quantity,
       if (unit != null) 'unit': unit,
-      if (expiryDate != null) 'expiry_date': expiryDate,
-      if (thresholdValue != null) 'threshold_value': thresholdValue,
+      if (dateIn != null) 'date_in': dateIn,
+      if (minStock != null) 'min_stock': minStock,
     });
   }
 
   ProductsCompanion copyWith(
       {Value<int>? id,
+      Value<String>? code,
       Value<String>? name,
       Value<String>? category,
       Value<String>? supplier,
       Value<int>? buyingPrice,
       Value<int>? quantity,
       Value<String>? unit,
-      Value<String>? expiryDate,
-      Value<int>? thresholdValue}) {
+      Value<DateTime>? dateIn,
+      Value<int>? minStock}) {
     return ProductsCompanion(
       id: id ?? this.id,
+      code: code ?? this.code,
       name: name ?? this.name,
       category: category ?? this.category,
       supplier: supplier ?? this.supplier,
       buyingPrice: buyingPrice ?? this.buyingPrice,
       quantity: quantity ?? this.quantity,
       unit: unit ?? this.unit,
-      expiryDate: expiryDate ?? this.expiryDate,
-      thresholdValue: thresholdValue ?? this.thresholdValue,
+      dateIn: dateIn ?? this.dateIn,
+      minStock: minStock ?? this.minStock,
     );
   }
 
@@ -1056,6 +1085,9 @@ class ProductsCompanion extends UpdateCompanion<Product> {
     final map = <String, Expression>{};
     if (id.present) {
       map['id'] = Variable<int>(id.value);
+    }
+    if (code.present) {
+      map['code'] = Variable<String>(code.value);
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -1075,11 +1107,11 @@ class ProductsCompanion extends UpdateCompanion<Product> {
     if (unit.present) {
       map['unit'] = Variable<String>(unit.value);
     }
-    if (expiryDate.present) {
-      map['expiry_date'] = Variable<String>(expiryDate.value);
+    if (dateIn.present) {
+      map['date_in'] = Variable<DateTime>(dateIn.value);
     }
-    if (thresholdValue.present) {
-      map['threshold_value'] = Variable<int>(thresholdValue.value);
+    if (minStock.present) {
+      map['min_stock'] = Variable<int>(minStock.value);
     }
     return map;
   }
@@ -1088,14 +1120,15 @@ class ProductsCompanion extends UpdateCompanion<Product> {
   String toString() {
     return (StringBuffer('ProductsCompanion(')
           ..write('id: $id, ')
+          ..write('code: $code, ')
           ..write('name: $name, ')
           ..write('category: $category, ')
           ..write('supplier: $supplier, ')
           ..write('buyingPrice: $buyingPrice, ')
           ..write('quantity: $quantity, ')
           ..write('unit: $unit, ')
-          ..write('expiryDate: $expiryDate, ')
-          ..write('thresholdValue: $thresholdValue')
+          ..write('dateIn: $dateIn, ')
+          ..write('minStock: $minStock')
           ..write(')'))
         .toString();
   }

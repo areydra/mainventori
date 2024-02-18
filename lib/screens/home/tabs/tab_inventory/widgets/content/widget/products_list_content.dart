@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mainventori/database/index.dart';
+import 'package:mainventori/widgets/button.dart';
 import 'package:mainventori/widgets/separator_horizontal.dart';
 
 class ProductsListContent extends StatefulWidget {
@@ -31,7 +32,17 @@ class _ProductsListContentState extends State<ProductsListContent> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      width: 120,
+                      width: 135,
+                      child: Text(
+                        widget.products[index].code,
+                        style: const TextStyle(
+                            fontSize: 14,
+                            color: Color.fromRGBO(72, 80, 94, 1),
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 220,
                       child: Text(
                         widget.products[index].name,
                         style: const TextStyle(
@@ -41,7 +52,7 @@ class _ProductsListContentState extends State<ProductsListContent> {
                       ),
                     ),
                     SizedBox(
-                      width: 100,
+                      width: 165,
                       child: Text(
                         'Rp${NumberFormat.decimalPattern('id').format(widget.products[index].buyingPrice)}',
                         style: const TextStyle(
@@ -51,7 +62,7 @@ class _ProductsListContentState extends State<ProductsListContent> {
                       ),
                     ),
                     SizedBox(
-                      width: 100,
+                      width: 165,
                       child: Text(
                         '${widget.products[index].quantity} ${widget.products[index].unit}',
                         style: const TextStyle(
@@ -61,9 +72,9 @@ class _ProductsListContentState extends State<ProductsListContent> {
                       ),
                     ),
                     SizedBox(
-                      width: 120,
+                      width: 165,
                       child: Text(
-                        '${widget.products[index].thresholdValue} ${widget.products[index].unit}',
+                        '${widget.products[index].minStock} ${widget.products[index].unit}',
                         style: const TextStyle(
                             fontSize: 14,
                             color: Color.fromRGBO(72, 80, 94, 1),
@@ -71,9 +82,10 @@ class _ProductsListContentState extends State<ProductsListContent> {
                       ),
                     ),
                     SizedBox(
-                      width: 120,
+                      width: 220,
                       child: Text(
-                        widget.products[index].expiryDate,
+                        DateFormat('dd MMMM yyyy')
+                            .format(widget.products[index].dateIn),
                         style: const TextStyle(
                             fontSize: 14,
                             color: Color.fromRGBO(72, 80, 94, 1),
@@ -81,7 +93,7 @@ class _ProductsListContentState extends State<ProductsListContent> {
                       ),
                     ),
                     SizedBox(
-                      width: 80,
+                      width: 165,
                       child: widget.products[index].quantity == 0
                           ? const Text(
                               'Out of stock',
@@ -91,7 +103,8 @@ class _ProductsListContentState extends State<ProductsListContent> {
                                 fontWeight: FontWeight.w500,
                               ),
                             )
-                          : widget.products[index].quantity < 10
+                          : widget.products[index].quantity <=
+                                  widget.products[index].minStock
                               ? const Text(
                                   'Low stock',
                                   style: TextStyle(
@@ -108,6 +121,12 @@ class _ProductsListContentState extends State<ProductsListContent> {
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
+                    ),
+                    Button(
+                      text: 'Edit',
+                      textColor: Colors.white,
+                      backgroundColor: const Color.fromRGBO(225, 131, 8, 1),
+                      onPress: () {},
                     ),
                   ],
                 ),

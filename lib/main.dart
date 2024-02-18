@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:mainventori/screens/home/index.dart';
 import 'package:window_manager/window_manager.dart';
@@ -10,10 +11,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();
   if (Platform.isWindows) {
-    WindowManager.instance.setMinimumSize(const Size(1600, 1000));
+    WindowManager.instance.setMinimumSize(const Size(1920, 1080));
   }
 
-  runApp(const MainApp());
+  runApp(const ProviderScope(
+    child: MainApp(),
+  ));
 }
 
 class MainApp extends StatelessWidget {

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:mainventori/screens/home/tabs/tab_inventory/widgets/content/widget/add_new_product_dialog.dart';
+import 'package:mainventori/widgets/button.dart';
 
 class Header extends StatefulWidget {
-  final Function addNewProduct;
+  final Function addNewProducts;
 
   const Header({
     Key? key,
-    required this.addNewProduct,
+    required this.addNewProducts,
   }) : super(key: key);
 
   @override
@@ -70,25 +71,41 @@ class _HeaderState extends State<Header> {
                 ),
               ),
               const SizedBox(width: 14),
-              TextButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          const Color.fromRGBO(19, 102, 217, 1)),
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white),
-                      padding: MaterialStateProperty.all<EdgeInsets>(
-                          const EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 26))),
-                  onPressed: () {
-                    SmartDialog.show(builder: (_) {
-                      return AddNewProductDialog(
-                          addNewProduct: widget.addNewProduct);
-                    });
-                  },
-                  child: const Text(
-                    'Add Product',
-                    style: TextStyle(fontSize: 14),
-                  )),
+              Button(
+                text: 'Add Product',
+                textColor: Colors.white,
+                backgroundColor: const Color.fromRGBO(19, 102, 217, 1),
+                onPress: () {
+                  SmartDialog.show(builder: (_) {
+                    return AddNewProductDialog(
+                        addNewProducts: widget.addNewProducts);
+                  });
+                },
+              ),
+              const SizedBox(width: 14),
+              Button(
+                text: 'Import CSV',
+                textColor: Colors.white,
+                backgroundColor: const Color.fromRGBO(16, 167, 96, 1),
+                onPress: () {
+                  SmartDialog.show(builder: (_) {
+                    return AddNewProductDialog(
+                        addNewProducts: widget.addNewProducts);
+                  });
+                },
+              ),
+              const SizedBox(width: 14),
+              Button(
+                text: 'Export Data',
+                textColor: Colors.white,
+                backgroundColor: const Color.fromRGBO(218, 62, 51, 1),
+                onPress: () {
+                  SmartDialog.show(builder: (_) {
+                    return AddNewProductDialog(
+                        addNewProducts: widget.addNewProducts);
+                  });
+                },
+              ),
             ],
           ),
         ],

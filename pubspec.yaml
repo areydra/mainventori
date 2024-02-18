@@ -19,6 +19,8 @@ dependencies:
   path: ^1.8.3
   sqlite3_flutter_libs: ^0.5.19+1
   syncfusion_flutter_datepicker: ^24.1.47
+  flutter_riverpod: ^2.4.10
+  riverpod_annotation: ^2.3.4
 
 dev_dependencies:
   flutter_test:
@@ -26,6 +28,9 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   drift_dev: ^2.14.1
   build_runner: ^2.4.8
+  riverpod_generator: ^2.3.11
+  custom_lint: ^0.6.0
+  riverpod_lint: ^2.3.9
 
 flutter:
   uses-material-design: true

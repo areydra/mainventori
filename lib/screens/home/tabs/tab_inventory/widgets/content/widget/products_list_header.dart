@@ -16,9 +16,9 @@ class ProductListHeader extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               SizedBox(
-                width: 120,
+                width: 135,
                 child: Text(
-                  'Products',
+                  'Kode Produk',
                   style: TextStyle(
                       fontSize: 14,
                       color: Color.fromRGBO(102, 112, 133, 1),
@@ -26,9 +26,9 @@ class ProductListHeader extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: 100,
+                width: 220,
                 child: Text(
-                  'Buying Price',
+                  'Nama Produk',
                   style: TextStyle(
                       fontSize: 14,
                       color: Color.fromRGBO(102, 112, 133, 1),
@@ -36,9 +36,9 @@ class ProductListHeader extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: 100,
+                width: 165,
                 child: Text(
-                  'Quantity',
+                  'Harga Beli',
                   style: TextStyle(
                       fontSize: 14,
                       color: Color.fromRGBO(102, 112, 133, 1),
@@ -46,9 +46,9 @@ class ProductListHeader extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: 120,
+                width: 165,
                 child: Text(
-                  'Threshold Value',
+                  'Jumlah Stok',
                   style: TextStyle(
                       fontSize: 14,
                       color: Color.fromRGBO(102, 112, 133, 1),
@@ -56,9 +56,9 @@ class ProductListHeader extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: 120,
+                width: 165,
                 child: Text(
-                  'Expiry Date',
+                  'Min Stok',
                   style: TextStyle(
                       fontSize: 14,
                       color: Color.fromRGBO(102, 112, 133, 1),
@@ -66,15 +66,26 @@ class ProductListHeader extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: 80,
+                width: 220,
                 child: Text(
-                  'Availability',
+                  'Tanggal Masuk',
                   style: TextStyle(
                       fontSize: 14,
                       color: Color.fromRGBO(102, 112, 133, 1),
                       fontWeight: FontWeight.w500),
                 ),
               ),
+              SizedBox(
+                width: 165,
+                child: Text(
+                  'Ketersediaan',
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: Color.fromRGBO(102, 112, 133, 1),
+                      fontWeight: FontWeight.w500),
+                ),
+              ),
+              SizedBox(width: 100),
             ],
           ),
         ),
