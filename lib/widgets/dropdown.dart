@@ -77,6 +77,9 @@ class _DialogDropdownState extends State<Dropdown> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               DropdownButtonFormField(
+                value: widget.selectedValue.text.isEmpty
+                    ? null
+                    : widget.selectedValue.text.toString(),
                 hint: Text(widget.hintTextField,
                     style: const TextStyle(
                       fontSize: 16,

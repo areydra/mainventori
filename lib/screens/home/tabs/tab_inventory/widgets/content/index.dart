@@ -60,6 +60,10 @@ class _ContentInventoryState extends State<ContentInventory> {
   void initState() {
     super.initState();
 
+    refreshDataProducts();
+  }
+
+  void refreshDataProducts() {
     getItemsPerPage(0);
     getTotalRowCount();
   }
@@ -75,7 +79,10 @@ class _ContentInventoryState extends State<ContentInventory> {
         children: [
           Header(addNewProducts: addNewProducts),
           const ProductListHeader(),
-          ProductsListContent(products: products),
+          ProductsListContent(
+            products: products,
+            refreshDataProducts: refreshDataProducts,
+          ),
           Footer(
               currentPage: currentPageNumber,
               totalPage: totalPageNumber,

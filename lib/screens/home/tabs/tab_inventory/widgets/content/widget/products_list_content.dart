@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:mainventori/database/index.dart';
+import 'package:mainventori/screens/home/tabs/tab_inventory/widgets/content/widget/edit_product_dialog.dart';
 import 'package:mainventori/widgets/button.dart';
 import 'package:mainventori/widgets/separator_horizontal.dart';
 
 class ProductsListContent extends StatefulWidget {
   final List<Product> products;
+  final Function refreshDataProducts;
 
   const ProductsListContent({
     Key? key,
     required this.products,
+    required this.refreshDataProducts,
   }) : super(key: key);
 
   @override
@@ -126,7 +130,14 @@ class _ProductsListContentState extends State<ProductsListContent> {
                       text: 'Edit',
                       textColor: Colors.white,
                       backgroundColor: const Color.fromRGBO(225, 131, 8, 1),
-                      onPress: () {},
+                      onPress: () {
+                        SmartDialog.show(builder: (_) {
+                          return EditProductDialog(
+                            product: widget.products[index],
+                            refreshDataProducts: widget.refreshDataProducts,
+                          );
+                        });
+                      },
                     ),
                   ],
                 ),

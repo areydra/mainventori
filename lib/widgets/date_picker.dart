@@ -90,7 +90,9 @@ class _DialogDatePickerState extends State<DatePicker> {
                       child: MaterialApp(
                         debugShowCheckedModeBanner: false,
                         home: getDateRangePicker(
-                            widget.textController, widget.onChangeValue),
+                          widget.textController,
+                          widget.onChangeValue,
+                        ),
                       ),
                     );
                   });
@@ -150,7 +152,7 @@ Widget getDateRangePicker(TextEditingController textController,
         selectionMode: DateRangePickerSelectionMode.single,
         onSelectionChanged: (DateRangePickerSelectionChangedArgs args) => {
           textController.text = DateFormat('dd MMMM yyyy').format(args.value),
-          onChangeValue!(DateFormat('dd MMMM yyyy').format(args.value)),
+          onChangeValue?.call(DateFormat('dd MMMM yyyy').format(args.value)),
           SmartDialog.dismiss(),
         },
       ),
