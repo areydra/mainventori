@@ -4,11 +4,11 @@ import 'package:mainventori/screens/home/tabs/tab_inventory/widgets/content/widg
 import 'package:mainventori/widgets/button.dart';
 
 class Header extends StatefulWidget {
-  final Function addNewProducts;
+  final Function refreshDataProducts;
 
   const Header({
     Key? key,
-    required this.addNewProducts,
+    required this.refreshDataProducts,
   }) : super(key: key);
 
   @override
@@ -78,7 +78,7 @@ class _HeaderState extends State<Header> {
                 onPress: () {
                   SmartDialog.show(builder: (_) {
                     return AddNewProductDialog(
-                        addNewProducts: widget.addNewProducts);
+                        refreshDataProducts: widget.refreshDataProducts);
                   });
                 },
               ),
@@ -90,7 +90,7 @@ class _HeaderState extends State<Header> {
                 onPress: () {
                   SmartDialog.show(builder: (_) {
                     return AddNewProductDialog(
-                        addNewProducts: widget.addNewProducts);
+                        refreshDataProducts: widget.refreshDataProducts);
                   });
                 },
               ),
@@ -102,7 +102,7 @@ class _HeaderState extends State<Header> {
                 onPress: () {
                   SmartDialog.show(builder: (_) {
                     return AddNewProductDialog(
-                        addNewProducts: widget.addNewProducts);
+                        refreshDataProducts: widget.refreshDataProducts);
                   });
                 },
               ),

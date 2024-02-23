@@ -36,18 +36,6 @@ class _ContentInventoryState extends State<ContentInventory> {
     });
   }
 
-  Future<void> addNewProducts(List<Product> productList) async {
-    List<Product> newProducts = [...productList, ...products];
-
-    if (newProducts.length > limitPerPage) {
-      newProducts.removeLast();
-    }
-
-    setState(() {
-      products = newProducts;
-    });
-  }
-
   getTotalRowCount() async {
     final int count = (await database.products.count().get())[0];
 
@@ -77,7 +65,7 @@ class _ContentInventoryState extends State<ContentInventory> {
       // padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       child: Column(
         children: [
-          Header(addNewProducts: addNewProducts),
+          Header(refreshDataProducts: refreshDataProducts),
           const ProductListHeader(),
           ProductsListContent(
             products: products,

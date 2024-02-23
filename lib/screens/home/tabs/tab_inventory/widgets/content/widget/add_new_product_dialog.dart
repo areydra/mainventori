@@ -14,11 +14,11 @@ import 'package:mainventori/widgets/dropdown.dart';
 import 'package:mainventori/widgets/text_input.dart';
 
 class AddNewProductDialog extends StatefulWidget {
-  final Function addNewProducts;
+  final Function refreshDataProducts;
 
   const AddNewProductDialog({
     Key? key,
-    required this.addNewProducts,
+    required this.refreshDataProducts,
   }) : super(key: key);
 
   @override
@@ -230,14 +230,7 @@ class _AddNewProductDialogState extends State<AddNewProductDialog> {
     await database.batch((batch) {
       batch.insertAll(database.products, products);
     }).then((_) async {
-      final lastInsertedRecord = await (database.select(database.products)
-            ..orderBy([
-              (t) => OrderingTerm(expression: t.id, mode: OrderingMode.desc)
-            ])
-            ..limit(products.length))
-          .get();
-
-      widget.addNewProducts(lastInsertedRecord);
+      widget.refreshDataProducts.call();
       SmartDialog.dismiss();
     }).catchError((error) async {
       for (int index = 0; index < products.length; index++) {
