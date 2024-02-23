@@ -20,9 +20,17 @@ class _ContentInventoryState extends State<ContentInventory> {
   int currentPageNumber = 0;
   int totalPageNumber = 0;
   int limitPerPage = 10;
+  String searchQuery = '';
 
-  Future<void> getItemsPerPage(int pageNumber) async {
+  Future<void> getItemsPerPage(int pageNumber, String query) async {
     List<Product> fetchedProducts = await (database.select(database.products)
+          ..where((column) {
+            return column.code.contains(query) |
+                column.name.contains(query) |
+                column.buyingPrice.cast<String>().contains(query) |
+                column.quantity.cast<String>().contains(query) |
+                column.minStock.cast<String>().contains(query);
+          })
           ..orderBy([
             (t) => drift.OrderingTerm(
                 expression: t.id, mode: drift.OrderingMode.desc)
@@ -52,8 +60,16 @@ class _ContentInventoryState extends State<ContentInventory> {
   }
 
   void refreshDataProducts() {
-    getItemsPerPage(0);
+    getItemsPerPage(0, searchQuery);
     getTotalRowCount();
+  }
+
+  void searchDataProducts(String query) {
+    getItemsPerPage(0, query);
+    getTotalRowCount();
+    setState(() {
+      searchQuery = query;
+    });
   }
 
   @override
@@ -65,7 +81,10 @@ class _ContentInventoryState extends State<ContentInventory> {
       // padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
       child: Column(
         children: [
-          Header(refreshDataProducts: refreshDataProducts),
+          Header(
+            refreshDataProducts: refreshDataProducts,
+            searchDataProducts: searchDataProducts,
+          ),
           const ProductListHeader(),
           ProductsListContent(
             products: products,
@@ -76,12 +95,12 @@ class _ContentInventoryState extends State<ContentInventory> {
               totalPage: totalPageNumber,
               onPressNextPage: () {
                 if ((currentPageNumber + 1) < totalPageNumber) {
-                  getItemsPerPage(currentPageNumber + 1);
+                  getItemsPerPage(currentPageNumber + 1, searchQuery);
                 }
               },
               onPressPreviousPage: () {
                 if (currentPageNumber > 0) {
-                  getItemsPerPage(currentPageNumber - 1);
+                  getItemsPerPage(currentPageNumber - 1, searchQuery);
                 }
               }),
         ],
