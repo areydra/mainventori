@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:mainventori/screens/home/tabs/tab_inventory/utils/index.dart';
 import 'package:mainventori/screens/home/tabs/tab_inventory/widgets/content/widget/add_new_product_dialog.dart';
 import 'package:mainventori/widgets/button.dart';
 
@@ -97,10 +98,8 @@ class _HeaderState extends State<Header> {
                 textColor: Colors.white,
                 backgroundColor: const Color.fromRGBO(16, 167, 96, 1),
                 onPress: () {
-                  SmartDialog.show(builder: (_) {
-                    return AddNewProductDialog(
-                        refreshDataProducts: widget.refreshDataProducts);
-                  });
+                  onPressImportCSV()
+                      .then((value) => widget.refreshDataProducts());
                 },
               ),
               const SizedBox(width: 14),
