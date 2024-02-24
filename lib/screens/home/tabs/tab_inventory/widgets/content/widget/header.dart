@@ -7,11 +7,13 @@ import 'package:mainventori/widgets/button.dart';
 class Header extends StatefulWidget {
   final Function refreshDataProducts;
   final Function searchDataProducts;
+  final Function exportDataToExcel;
 
   const Header({
     Key? key,
     required this.refreshDataProducts,
     required this.searchDataProducts,
+    required this.exportDataToExcel,
   }) : super(key: key);
 
   @override
@@ -107,12 +109,7 @@ class _HeaderState extends State<Header> {
                 text: 'Export Data',
                 textColor: Colors.white,
                 backgroundColor: const Color.fromRGBO(218, 62, 51, 1),
-                onPress: () {
-                  SmartDialog.show(builder: (_) {
-                    return AddNewProductDialog(
-                        refreshDataProducts: widget.refreshDataProducts);
-                  });
-                },
+                onPress: () => widget.exportDataToExcel.call(),
               ),
             ],
           ),

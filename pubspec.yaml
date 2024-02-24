@@ -23,6 +23,7 @@ dependencies:
   riverpod_annotation: ^2.3.4
   csv: ^5.1.1
   file_picker: ^6.1.1
+  excel: ^4.0.2
 
 dev_dependencies:
   flutter_test:
