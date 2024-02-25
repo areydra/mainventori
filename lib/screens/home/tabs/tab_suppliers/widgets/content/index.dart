@@ -35,18 +35,6 @@ class _ContentSuppliers extends State<ContentSuppliers> {
     });
   }
 
-  Future<void> addNewSupplier(Supplier supplier) async {
-    List<Supplier> newSuppliers = [supplier, ...suppliers];
-
-    if (newSuppliers.length > limitPerPage) {
-      newSuppliers.removeLast();
-    }
-
-    setState(() {
-      suppliers = newSuppliers;
-    });
-  }
-
   getTotalRowCount() async {
     final int count = (await database.suppliers.count().get())[0];
 
@@ -59,6 +47,10 @@ class _ContentSuppliers extends State<ContentSuppliers> {
   void initState() {
     super.initState();
 
+    fetchDataSuppliers();
+  }
+
+  void fetchDataSuppliers() {
     getItemsPerPage(0);
     getTotalRowCount();
   }
@@ -70,7 +62,7 @@ class _ContentSuppliers extends State<ContentSuppliers> {
           borderRadius: BorderRadius.circular(8), color: Colors.white),
       child: Column(
         children: [
-          Header(addNewSupplier: addNewSupplier),
+          Header(refreshDataSuppliers: fetchDataSuppliers),
           SupplierList(suppliers: suppliers),
           Footer(
             currentPage: currentPageNumber,

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:mainventori/screens/home/tabs/tab_suppliers/widgets/add_new_supplier_dialog.dart';
+import 'package:mainventori/widgets/button.dart';
 
 class Header extends StatefulWidget {
-  final Function addNewSupplier;
+  final Function refreshDataSuppliers;
 
   const Header({
     Key? key,
-    required this.addNewSupplier,
+    required this.refreshDataSuppliers,
   }) : super(key: key);
 
   @override
@@ -70,26 +71,18 @@ class _HeaderState extends State<Header> {
                 ),
               ),
               const SizedBox(width: 14),
-              TextButton(
-                  style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          const Color.fromRGBO(19, 102, 217, 1)),
-                      foregroundColor:
-                          MaterialStateProperty.all<Color>(Colors.white),
-                      padding: MaterialStateProperty.all<EdgeInsets>(
-                          const EdgeInsets.symmetric(
-                              vertical: 20, horizontal: 26))),
-                  onPressed: () {
-                    SmartDialog.show(builder: (_) {
-                      return DialogSupplierFields(
-                        addNewSupplier: widget.addNewSupplier,
-                      );
-                    });
-                  },
-                  child: const Text(
-                    'Add Suppliers',
-                    style: TextStyle(fontSize: 14),
-                  )),
+              Button(
+                onPress: () => {
+                  SmartDialog.show(builder: (_) {
+                    return DialogSupplierFields(
+                      refreshDataSuppliers: widget.refreshDataSuppliers,
+                    );
+                  })
+                },
+                text: 'Add Suppliers',
+                backgroundColor: const Color.fromRGBO(19, 102, 217, 1),
+                textColor: Colors.white,
+              )
             ],
           ),
         ],

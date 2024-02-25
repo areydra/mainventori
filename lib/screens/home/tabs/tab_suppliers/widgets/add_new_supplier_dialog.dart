@@ -6,11 +6,11 @@ import 'package:mainventori/widgets/custom_dialog/index.dart';
 import 'package:mainventori/widgets/custom_dialog/widgets/dialog_field.dart';
 
 class DialogSupplierFields extends StatefulWidget {
-  final Function addNewSupplier;
+  final Function refreshDataSuppliers;
 
   const DialogSupplierFields({
     Key? key,
-    required this.addNewSupplier,
+    required this.refreshDataSuppliers,
   }) : super(key: key);
 
   @override
@@ -59,21 +59,13 @@ class _DialogState extends State<DialogSupplierFields> {
       return;
     }
 
-    final id = await database
-        .into(database.suppliers)
-        .insert(SuppliersCompanion.insert(
+    await database.into(database.suppliers).insert(SuppliersCompanion.insert(
           name: textName.text,
           contactNumber: textContactNumber.text,
           email: textEmail.text,
         ));
 
-    widget.addNewSupplier(Supplier(
-      id: id,
-      name: textName.text,
-      contactNumber: textContactNumber.text,
-      email: textEmail.text,
-    ));
-
+    widget.refreshDataSuppliers.call();
     SmartDialog.dismiss();
   }
 
@@ -91,47 +83,14 @@ class _DialogState extends State<DialogSupplierFields> {
   Widget build(BuildContext context) {
     return CustomDialog(
       width: 500,
-      height: 517,
+      height: 400,
       title: 'New Supplier',
       textConfirm: 'Add Supplier',
       textCancel: 'Discard',
       onPressConfirm: onClickConfirm,
       onPressCancel: onClickCancel,
       content: [
-        const SizedBox(height: 12),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            DottedBorder(
-              borderType: BorderType.RRect,
-              dashPattern: const [6],
-              color: const Color.fromRGBO(157, 157, 157, 1),
-              radius: const Radius.circular(80),
-              child: const SizedBox(
-                width: 80,
-                height: 80,
-                child: Image(
-                  image: AssetImage('assets/icons/user.png'),
-                  width: 70,
-                  height: 70,
-                ),
-              ),
-            ),
-            const SizedBox(width: 20),
-            const DefaultTextStyle(
-              style: TextStyle(color: Color.fromRGBO(133, 141, 157, 1)),
-              child: Column(children: [
-                Text('Drag image here'),
-                Text('or'),
-                Text(
-                  'Browse image',
-                  style: TextStyle(color: Color.fromRGBO(68, 141, 242, 1)),
-                ),
-              ]),
-            )
-          ],
-        ),
-        const SizedBox(height: 32),
+        const SizedBox(height: 24),
         DialogField(
           label: 'Supplier Name',
           hintTextField: 'Enter supplier name',
@@ -139,7 +98,7 @@ class _DialogState extends State<DialogSupplierFields> {
           textController: textName,
           onChangeValue: (_) => onChangeValue("name"),
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 12),
         DialogField(
           label: 'Contact Number',
           hintTextField: 'Enter supplier contact number',
@@ -148,7 +107,7 @@ class _DialogState extends State<DialogSupplierFields> {
           onChangeValue: (_) => onChangeValue("contactNumber"),
           fieldType: FieldType.number,
         ),
-        const SizedBox(height: 24),
+        const SizedBox(height: 12),
         DialogField(
           label: 'Email',
           hintTextField: 'Select supplier email',
