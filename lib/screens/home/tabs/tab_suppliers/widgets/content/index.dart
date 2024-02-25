@@ -19,9 +19,15 @@ class _ContentSuppliers extends State<ContentSuppliers> {
   int currentPageNumber = 0;
   int totalPageNumber = 0;
   int limitPerPage = 10;
+  String searchQuery = '';
 
-  Future<void> getItemsPerPage(int pageNumber) async {
+  Future<void> getItemsPerPage(int pageNumber, String query) async {
     List<Supplier> fetchSuppliers = await (database.select(database.suppliers)
+          ..where((column) {
+            return column.name.contains(query) |
+                column.contactNumber.contains(query) |
+                column.email.contains(query);
+          })
           ..orderBy([
             (t) => drift.OrderingTerm(
                 expression: t.id, mode: drift.OrderingMode.desc)
@@ -32,6 +38,14 @@ class _ContentSuppliers extends State<ContentSuppliers> {
     setState(() {
       suppliers = fetchSuppliers;
       currentPageNumber = pageNumber;
+    });
+  }
+
+  void searchSuppliers(String query) {
+    getItemsPerPage(0, query);
+    getTotalRowCount();
+    setState(() {
+      searchQuery = query;
     });
   }
 
@@ -51,7 +65,7 @@ class _ContentSuppliers extends State<ContentSuppliers> {
   }
 
   void fetchDataSuppliers() {
-    getItemsPerPage(0);
+    getItemsPerPage(0, searchQuery);
     getTotalRowCount();
   }
 
@@ -62,19 +76,22 @@ class _ContentSuppliers extends State<ContentSuppliers> {
           borderRadius: BorderRadius.circular(8), color: Colors.white),
       child: Column(
         children: [
-          Header(refreshDataSuppliers: fetchDataSuppliers),
+          Header(
+            refreshDataSuppliers: fetchDataSuppliers,
+            searchSuppliers: searchSuppliers,
+          ),
           SupplierList(suppliers: suppliers),
           Footer(
             currentPage: currentPageNumber,
             totalPage: totalPageNumber,
             onPressNextPage: () {
               if ((currentPageNumber + 1) < totalPageNumber) {
-                getItemsPerPage(currentPageNumber + 1);
+                getItemsPerPage(currentPageNumber + 1, searchQuery);
               }
             },
             onPressPreviousPage: () {
               if (currentPageNumber > 0) {
-                getItemsPerPage(currentPageNumber - 1);
+                getItemsPerPage(currentPageNumber - 1, searchQuery);
               }
             },
           ),

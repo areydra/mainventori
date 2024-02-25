@@ -5,10 +5,12 @@ import 'package:mainventori/widgets/button.dart';
 
 class Header extends StatefulWidget {
   final Function refreshDataSuppliers;
+  final Function searchSuppliers;
 
   const Header({
     Key? key,
     required this.refreshDataSuppliers,
+    required this.searchSuppliers,
   }) : super(key: key);
 
   @override
@@ -16,6 +18,8 @@ class Header extends StatefulWidget {
 }
 
 class _HeaderState extends State<Header> {
+  TextEditingController textSearchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -64,6 +68,11 @@ class _HeaderState extends State<Header> {
                               fontWeight: FontWeight.normal,
                             ),
                           ),
+                          controller: textSearchController,
+                          onEditingComplete: () => {
+                            widget.searchSuppliers
+                                .call(textSearchController.text)
+                          },
                         ),
                       ),
                     ],
