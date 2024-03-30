@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:drift/native.dart';
 import 'package:drift/drift.dart';
+import 'package:mainventori/database/daos/orders.dart';
+import 'package:mainventori/database/daos/products.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 // ignore: depend_on_referenced_packages
@@ -12,9 +14,13 @@ import 'package:mainventori/database/tables/customers.dart';
 import 'package:mainventori/database/tables/orders.dart';
 import 'package:mainventori/database/tables/products.dart';
 import 'package:mainventori/database/tables/suppliers.dart';
+import 'package:mainventori/database/tables/orders_list.dart';
+
 part 'index.g.dart';
 
-@DriftDatabase(tables: [Customers, Orders, Products, Suppliers])
+@DriftDatabase(
+    tables: [Customers, Orders, Products, Suppliers, OrdersList],
+    daos: [ProductsDao, OrdersDao])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
@@ -30,7 +36,7 @@ LazyDatabase _openConnection() {
     if (Platform.isAndroid) {
       await applyWorkaroundToOpenSqlite3OnOldAndroidVersions();
     }
-    print("dbFolder.path ${dbFolder.path}");
+
     final cachebase = (await getTemporaryDirectory()).path;
     sqlite3.tempDirectory = cachebase;
 

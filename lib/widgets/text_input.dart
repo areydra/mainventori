@@ -15,9 +15,12 @@ class TextInput extends StatefulWidget {
   final double height;
   final double width;
   final bool isError;
+  final bool isEnabled;
   late final TextEditingController textController;
   void Function(String)? onChangeValue;
+  void Function()? onEditingComplete;
   final CustomTextInputType? fieldType;
+  final Color? textColor;
 
   TextInput({
     Key? key,
@@ -27,7 +30,10 @@ class TextInput extends StatefulWidget {
     this.height = 60,
     this.width = 150,
     this.onChangeValue,
+    this.onEditingComplete,
+    this.isEnabled = true,
     this.fieldType = CustomTextInputType.text,
+    this.textColor = const Color.fromRGBO(152, 159, 173, 1),
     TextEditingController? textController, // Make it nullable
   })  : textController = textController ?? TextEditingController(),
         super(key: key);
@@ -67,8 +73,14 @@ class _FieldState extends State<TextInput> {
               TextFormField(
                 controller: widget.textController,
                 decoration: InputDecoration(
+                  filled: !widget.isEnabled,
+                  fillColor: const Color.fromRGBO(240, 241, 243, 1),
                   hintText: widget.hintTextField,
                   enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: borderColor, width: 1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  disabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: borderColor, width: 1),
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -85,12 +97,19 @@ class _FieldState extends State<TextInput> {
                       const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
                 ),
                 onChanged: widget.onChangeValue,
-                style: const TextStyle(fontSize: 16),
+                onEditingComplete: widget.onEditingComplete,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: widget.textController.text.isNotEmpty
+                      ? Colors.black
+                      : widget.textColor,
+                ),
                 inputFormatters: widget.fieldType == CustomTextInputType.number
                     ? <TextInputFormatter>[
                         FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                       ]
                     : [],
+                enabled: widget.isEnabled,
               ),
             ],
           ),

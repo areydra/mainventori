@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:mainventori/screens/home/tabs/tab_orders/widgets/dialog_order_fields.dart';
+import 'package:mainventori/database/daos/orders.dart';
+import 'package:mainventori/database/index.dart';
+import 'package:mainventori/screens/home/tabs/tab_inventory/widgets/content/widget/footer.dart';
+import 'package:mainventori/screens/home/tabs/tab_orders/widgets/add_new_order_dialog/index.dart';
 import 'package:mainventori/widgets/separator_horizontal.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
@@ -73,8 +77,50 @@ List<ProductsOrdersStock> products = [
   ),
 ];
 
-class ProductsOrders extends StatelessWidget {
+class ProductsOrders extends ConsumerStatefulWidget {
   const ProductsOrders({Key? key}) : super(key: key);
+
+  @override
+  ConsumerState<ProductsOrders> createState() => _ProductsOrdersState();
+}
+
+class _ProductsOrdersState extends ConsumerState<ProductsOrders> {
+  final database = AppDatabase();
+  List<Order> orders = [];
+  int currentPageNumber = 0;
+  int totalPageNumber = 0;
+  int limitPerPage = 10;
+  String searchQuery = '';
+
+  TextEditingController textSearchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    getOrdersData(currentPageNumber, searchQuery);
+  }
+
+  Future<void> getOrdersData(currentPageNumber, searchQuery) async {
+    DaosGetItemsPerPage fetchOrders = await database.ordersDao
+        .getItemsPerPage(currentPageNumber, limitPerPage, searchQuery);
+
+    int fetchTotalPageNumber =
+        await database.ordersDao.getTotalRowCount(limitPerPage, searchQuery);
+
+    setState(() {
+      orders = fetchOrders.orders;
+      currentPageNumber = fetchOrders.currentPageNumber;
+      totalPageNumber = fetchTotalPageNumber;
+    });
+  }
+
+  void searchDataOrders(String query) {
+    getOrdersData(0, query);
+    setState(() {
+      searchQuery = query;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +137,7 @@ class ProductsOrders extends StatelessWidget {
               children: [
                 const Expanded(
                   child: Text(
-                    'Products',
+                    'Orders',
                     style: TextStyle(
                       fontSize: 20,
                     ),
@@ -109,21 +155,32 @@ class ProductsOrders extends StatelessWidget {
                           border: Border.all(
                               color: const Color.fromRGBO(240, 241, 243, 1)),
                         ),
-                        child: const Row(
+                        child: Row(
                           children: [
-                            Image(
+                            const Image(
                               image: AssetImage('assets/icons/search.png'),
                               width: 24,
                               height: 24,
                             ),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             Expanded(
-                              child: TextField(
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: 'Search product',
-                                    hintStyle:
-                                        TextStyle(fontSize: 16, height: 2.8)),
+                              child: TextFormField(
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  contentPadding: EdgeInsets.symmetric(
+                                    vertical: 6,
+                                  ),
+                                  hintText: 'Search customer or product',
+                                  hintStyle: TextStyle(
+                                    fontSize: 16,
+                                    height: 2.8,
+                                    fontWeight: FontWeight.normal,
+                                  ),
+                                ),
+                                controller: textSearchController,
+                                onEditingComplete: () {
+                                  searchDataOrders(textSearchController.text);
+                                },
                               ),
                             ),
                           ],
@@ -142,7 +199,7 @@ class ProductsOrders extends StatelessWidget {
                                     vertical: 20, horizontal: 26))),
                         onPressed: () {
                           SmartDialog.show(builder: (_) {
-                            return const DialogOrderFields();
+                            return AddNewOrderDialog(refreshDataOrders: () {});
                           });
                         },
                         child: const Text(
@@ -162,19 +219,9 @@ class ProductsOrders extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: 120,
+                  width: 50,
                   child: Text(
-                    'Products',
-                    style: TextStyle(
-                        fontSize: 14,
-                        color: Color.fromRGBO(102, 112, 133, 1),
-                        fontWeight: FontWeight.w500),
-                  ),
-                ),
-                SizedBox(
-                  width: 80,
-                  child: Text(
-                    'Order Value',
+                    'ID',
                     style: TextStyle(
                         fontSize: 14,
                         color: Color.fromRGBO(102, 112, 133, 1),
@@ -184,7 +231,7 @@ class ProductsOrders extends StatelessWidget {
                 SizedBox(
                   width: 100,
                   child: Text(
-                    'Quantity',
+                    'Customer',
                     style: TextStyle(
                         fontSize: 14,
                         color: Color.fromRGBO(102, 112, 133, 1),
@@ -192,9 +239,9 @@ class ProductsOrders extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  width: 80,
+                  width: 100,
                   child: Text(
-                    'Order ID',
+                    'Produk',
                     style: TextStyle(
                         fontSize: 14,
                         color: Color.fromRGBO(102, 112, 133, 1),
@@ -202,9 +249,19 @@ class ProductsOrders extends StatelessWidget {
                   ),
                 ),
                 SizedBox(
-                  width: 120,
+                  width: 100,
                   child: Text(
-                    'Expected Delivery',
+                    'Total Belanja',
+                    style: TextStyle(
+                        fontSize: 14,
+                        color: Color.fromRGBO(102, 112, 133, 1),
+                        fontWeight: FontWeight.w500),
+                  ),
+                ),
+                SizedBox(
+                  width: 150,
+                  child: Text(
+                    'Tanggal Pengiriman',
                     style: TextStyle(
                         fontSize: 14,
                         color: Color.fromRGBO(102, 112, 133, 1),
@@ -218,7 +275,7 @@ class ProductsOrders extends StatelessWidget {
           const SeparatorHorizontal(),
           Expanded(
             child: ListView.builder(
-              itemCount: products.length,
+              itemCount: orders.length,
               itemBuilder: (context, index) {
                 return Column(
                   children: [
@@ -229,19 +286,9 @@ class ProductsOrders extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
-                            width: 120,
+                            width: 50,
                             child: Text(
-                              products[index].name,
-                              style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Color.fromRGBO(72, 80, 94, 1),
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 80,
-                            child: Text(
-                              'Rp${NumberFormat.decimalPattern('id').format(products[index].orderValue)}',
+                              orders[index].id.toString(),
                               style: const TextStyle(
                                   fontSize: 14,
                                   color: Color.fromRGBO(72, 80, 94, 1),
@@ -251,7 +298,7 @@ class ProductsOrders extends StatelessWidget {
                           SizedBox(
                             width: 100,
                             child: Text(
-                              '${products[index].quantity} ${products[index].unit}',
+                              orders[index].customer,
                               style: const TextStyle(
                                   fontSize: 14,
                                   color: Color.fromRGBO(72, 80, 94, 1),
@@ -259,9 +306,36 @@ class ProductsOrders extends StatelessWidget {
                             ),
                           ),
                           SizedBox(
-                            width: 80,
+                            width: 100,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  orders[index].productName,
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      color: Color.fromRGBO(72, 80, 94, 1),
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                Visibility(
+                                  visible:
+                                      (orders[index].totalOrdersQuantity - 1) >
+                                          0,
+                                  child: Text(
+                                    '+${(orders[index].totalOrdersQuantity - 1).toString()} product lainnya.',
+                                    style: const TextStyle(
+                                        fontSize: 10,
+                                        color: Color.fromRGBO(72, 80, 94, 1),
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: 100,
                             child: Text(
-                              '${products[index].orderId}',
+                              'Rp${NumberFormat.decimalPattern('id').format(orders[index].totalOrdersSellingPrice)}',
                               style: const TextStyle(
                                   fontSize: 14,
                                   color: Color.fromRGBO(72, 80, 94, 1),
@@ -269,9 +343,10 @@ class ProductsOrders extends StatelessWidget {
                             ),
                           ),
                           SizedBox(
-                            width: 120,
+                            width: 150,
                             child: Text(
-                              products[index].expectedDelivery,
+                              DateFormat('dd MMMM yyyy')
+                                  .format(orders[index].deliveryDate),
                               style: const TextStyle(
                                   fontSize: 14,
                                   color: Color.fromRGBO(72, 80, 94, 1),
@@ -291,59 +366,19 @@ class ProductsOrders extends StatelessWidget {
               },
             ),
           ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                    style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(4),
-                                    side: const BorderSide(
-                                        color:
-                                            Color.fromRGBO(208, 211, 217, 1)))),
-                        foregroundColor: MaterialStateProperty.all<Color>(
-                            const Color.fromRGBO(72, 80, 94, 1)),
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                            const EdgeInsets.symmetric(
-                                vertical: 20, horizontal: 26))),
-                    onPressed: () {
-                      // put your code here
-                      // print("heello dere");
-                    },
-                    child: const Text(
-                      'Previous',
-                      style: TextStyle(fontSize: 14),
-                    )),
-                const Text('Page 1 of 10'),
-                TextButton(
-                    style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(4),
-                                    side: const BorderSide(
-                                        color:
-                                            Color.fromRGBO(208, 211, 217, 1)))),
-                        foregroundColor: MaterialStateProperty.all<Color>(
-                            const Color.fromRGBO(72, 80, 94, 1)),
-                        padding: MaterialStateProperty.all<EdgeInsets>(
-                            const EdgeInsets.symmetric(
-                                vertical: 20, horizontal: 26))),
-                    onPressed: () {
-                      // put your code here
-                      // print("heello dere");
-                    },
-                    child: const Text(
-                      'Next',
-                      style: TextStyle(fontSize: 14),
-                    )),
-              ],
-            ),
-          )
+          Footer(
+              currentPage: currentPageNumber,
+              totalPage: totalPageNumber,
+              onPressNextPage: () {
+                if ((currentPageNumber + 1) < totalPageNumber) {
+                  getOrdersData(currentPageNumber + 1, searchQuery);
+                }
+              },
+              onPressPreviousPage: () {
+                if (currentPageNumber > 0) {
+                  getOrdersData(currentPageNumber - 1, searchQuery);
+                }
+              }),
         ],
       ),
     );

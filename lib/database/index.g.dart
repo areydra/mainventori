@@ -306,43 +306,66 @@ class $OrdersTable extends Orders with TableInfo<$OrdersTable, Order> {
       requiredDuringInsert: false,
       defaultConstraints:
           GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _nameMeta = const VerificationMeta('name');
+  static const VerificationMeta _productNameMeta =
+      const VerificationMeta('productName');
   @override
-  late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
+  late final GeneratedColumn<String> productName = GeneratedColumn<String>(
+      'product_name', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _expectedDeliveryMeta =
-      const VerificationMeta('expectedDelivery');
+  static const VerificationMeta _productQuantityMeta =
+      const VerificationMeta('productQuantity');
   @override
-  late final GeneratedColumn<String> expectedDelivery = GeneratedColumn<String>(
-      'expected_delivery', aliasedName, false,
+  late final GeneratedColumn<int> productQuantity = GeneratedColumn<int>(
+      'product_quantity', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _productSellingPriceMeta =
+      const VerificationMeta('productSellingPrice');
+  @override
+  late final GeneratedColumn<int> productSellingPrice = GeneratedColumn<int>(
+      'product_selling_price', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _totalOrdersQuantityMeta =
+      const VerificationMeta('totalOrdersQuantity');
+  @override
+  late final GeneratedColumn<int> totalOrdersQuantity = GeneratedColumn<int>(
+      'total_orders_quantity', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _totalOrdersSellingPriceMeta =
+      const VerificationMeta('totalOrdersSellingPrice');
+  @override
+  late final GeneratedColumn<int> totalOrdersSellingPrice =
+      GeneratedColumn<int>('total_orders_selling_price', aliasedName, false,
+          type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _deliveryDateMeta =
+      const VerificationMeta('deliveryDate');
+  @override
+  late final GeneratedColumn<DateTime> deliveryDate = GeneratedColumn<DateTime>(
+      'delivery_date', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  static const VerificationMeta _customerMeta =
+      const VerificationMeta('customer');
+  @override
+  late final GeneratedColumn<String> customer = GeneratedColumn<String>(
+      'customer', aliasedName, false,
       type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _unitMeta = const VerificationMeta('unit');
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
   @override
-  late final GeneratedColumn<String> unit = GeneratedColumn<String>(
-      'unit', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _orderValueMeta =
-      const VerificationMeta('orderValue');
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
   @override
-  late final GeneratedColumn<int> orderValue = GeneratedColumn<int>(
-      'order_value', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _quantityMeta =
-      const VerificationMeta('quantity');
-  @override
-  late final GeneratedColumn<int> quantity = GeneratedColumn<int>(
-      'quantity', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _orderIdMeta =
-      const VerificationMeta('orderId');
-  @override
-  late final GeneratedColumn<int> orderId = GeneratedColumn<int>(
-      'order_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  @override
-  List<GeneratedColumn> get $columns =>
-      [id, name, expectedDelivery, unit, orderValue, quantity, orderId];
+  List<GeneratedColumn> get $columns => [
+        id,
+        productName,
+        productQuantity,
+        productSellingPrice,
+        totalOrdersQuantity,
+        totalOrdersSellingPrice,
+        deliveryDate,
+        customer,
+        createdAt
+      ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -356,45 +379,66 @@ class $OrdersTable extends Orders with TableInfo<$OrdersTable, Order> {
     if (data.containsKey('id')) {
       context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
     }
-    if (data.containsKey('name')) {
+    if (data.containsKey('product_name')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+          _productNameMeta,
+          productName.isAcceptableOrUnknown(
+              data['product_name']!, _productNameMeta));
     } else if (isInserting) {
-      context.missing(_nameMeta);
+      context.missing(_productNameMeta);
     }
-    if (data.containsKey('expected_delivery')) {
+    if (data.containsKey('product_quantity')) {
       context.handle(
-          _expectedDeliveryMeta,
-          expectedDelivery.isAcceptableOrUnknown(
-              data['expected_delivery']!, _expectedDeliveryMeta));
+          _productQuantityMeta,
+          productQuantity.isAcceptableOrUnknown(
+              data['product_quantity']!, _productQuantityMeta));
     } else if (isInserting) {
-      context.missing(_expectedDeliveryMeta);
+      context.missing(_productQuantityMeta);
     }
-    if (data.containsKey('unit')) {
+    if (data.containsKey('product_selling_price')) {
       context.handle(
-          _unitMeta, unit.isAcceptableOrUnknown(data['unit']!, _unitMeta));
+          _productSellingPriceMeta,
+          productSellingPrice.isAcceptableOrUnknown(
+              data['product_selling_price']!, _productSellingPriceMeta));
     } else if (isInserting) {
-      context.missing(_unitMeta);
+      context.missing(_productSellingPriceMeta);
     }
-    if (data.containsKey('order_value')) {
+    if (data.containsKey('total_orders_quantity')) {
       context.handle(
-          _orderValueMeta,
-          orderValue.isAcceptableOrUnknown(
-              data['order_value']!, _orderValueMeta));
+          _totalOrdersQuantityMeta,
+          totalOrdersQuantity.isAcceptableOrUnknown(
+              data['total_orders_quantity']!, _totalOrdersQuantityMeta));
     } else if (isInserting) {
-      context.missing(_orderValueMeta);
+      context.missing(_totalOrdersQuantityMeta);
     }
-    if (data.containsKey('quantity')) {
-      context.handle(_quantityMeta,
-          quantity.isAcceptableOrUnknown(data['quantity']!, _quantityMeta));
+    if (data.containsKey('total_orders_selling_price')) {
+      context.handle(
+          _totalOrdersSellingPriceMeta,
+          totalOrdersSellingPrice.isAcceptableOrUnknown(
+              data['total_orders_selling_price']!,
+              _totalOrdersSellingPriceMeta));
     } else if (isInserting) {
-      context.missing(_quantityMeta);
+      context.missing(_totalOrdersSellingPriceMeta);
     }
-    if (data.containsKey('order_id')) {
-      context.handle(_orderIdMeta,
-          orderId.isAcceptableOrUnknown(data['order_id']!, _orderIdMeta));
+    if (data.containsKey('delivery_date')) {
+      context.handle(
+          _deliveryDateMeta,
+          deliveryDate.isAcceptableOrUnknown(
+              data['delivery_date']!, _deliveryDateMeta));
     } else if (isInserting) {
-      context.missing(_orderIdMeta);
+      context.missing(_deliveryDateMeta);
+    }
+    if (data.containsKey('customer')) {
+      context.handle(_customerMeta,
+          customer.isAcceptableOrUnknown(data['customer']!, _customerMeta));
+    } else if (isInserting) {
+      context.missing(_customerMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
     }
     return context;
   }
@@ -407,18 +451,23 @@ class $OrdersTable extends Orders with TableInfo<$OrdersTable, Order> {
     return Order(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      expectedDelivery: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}expected_delivery'])!,
-      unit: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}unit'])!,
-      orderValue: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}order_value'])!,
-      quantity: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}quantity'])!,
-      orderId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}order_id'])!,
+      productName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}product_name'])!,
+      productQuantity: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}product_quantity'])!,
+      productSellingPrice: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}product_selling_price'])!,
+      totalOrdersQuantity: attachedDatabase.typeMapping.read(
+          DriftSqlType.int, data['${effectivePrefix}total_orders_quantity'])!,
+      totalOrdersSellingPrice: attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}total_orders_selling_price'])!,
+      deliveryDate: attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime, data['${effectivePrefix}delivery_date'])!,
+      customer: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}customer'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
     );
   }
 
@@ -430,42 +479,50 @@ class $OrdersTable extends Orders with TableInfo<$OrdersTable, Order> {
 
 class Order extends DataClass implements Insertable<Order> {
   final int id;
-  final String name;
-  final String expectedDelivery;
-  final String unit;
-  final int orderValue;
-  final int quantity;
-  final int orderId;
+  final String productName;
+  final int productQuantity;
+  final int productSellingPrice;
+  final int totalOrdersQuantity;
+  final int totalOrdersSellingPrice;
+  final DateTime deliveryDate;
+  final String customer;
+  final DateTime createdAt;
   const Order(
       {required this.id,
-      required this.name,
-      required this.expectedDelivery,
-      required this.unit,
-      required this.orderValue,
-      required this.quantity,
-      required this.orderId});
+      required this.productName,
+      required this.productQuantity,
+      required this.productSellingPrice,
+      required this.totalOrdersQuantity,
+      required this.totalOrdersSellingPrice,
+      required this.deliveryDate,
+      required this.customer,
+      required this.createdAt});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['id'] = Variable<int>(id);
-    map['name'] = Variable<String>(name);
-    map['expected_delivery'] = Variable<String>(expectedDelivery);
-    map['unit'] = Variable<String>(unit);
-    map['order_value'] = Variable<int>(orderValue);
-    map['quantity'] = Variable<int>(quantity);
-    map['order_id'] = Variable<int>(orderId);
+    map['product_name'] = Variable<String>(productName);
+    map['product_quantity'] = Variable<int>(productQuantity);
+    map['product_selling_price'] = Variable<int>(productSellingPrice);
+    map['total_orders_quantity'] = Variable<int>(totalOrdersQuantity);
+    map['total_orders_selling_price'] = Variable<int>(totalOrdersSellingPrice);
+    map['delivery_date'] = Variable<DateTime>(deliveryDate);
+    map['customer'] = Variable<String>(customer);
+    map['created_at'] = Variable<DateTime>(createdAt);
     return map;
   }
 
   OrdersCompanion toCompanion(bool nullToAbsent) {
     return OrdersCompanion(
       id: Value(id),
-      name: Value(name),
-      expectedDelivery: Value(expectedDelivery),
-      unit: Value(unit),
-      orderValue: Value(orderValue),
-      quantity: Value(quantity),
-      orderId: Value(orderId),
+      productName: Value(productName),
+      productQuantity: Value(productQuantity),
+      productSellingPrice: Value(productSellingPrice),
+      totalOrdersQuantity: Value(totalOrdersQuantity),
+      totalOrdersSellingPrice: Value(totalOrdersSellingPrice),
+      deliveryDate: Value(deliveryDate),
+      customer: Value(customer),
+      createdAt: Value(createdAt),
     );
   }
 
@@ -474,12 +531,17 @@ class Order extends DataClass implements Insertable<Order> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Order(
       id: serializer.fromJson<int>(json['id']),
-      name: serializer.fromJson<String>(json['name']),
-      expectedDelivery: serializer.fromJson<String>(json['expectedDelivery']),
-      unit: serializer.fromJson<String>(json['unit']),
-      orderValue: serializer.fromJson<int>(json['orderValue']),
-      quantity: serializer.fromJson<int>(json['quantity']),
-      orderId: serializer.fromJson<int>(json['orderId']),
+      productName: serializer.fromJson<String>(json['productName']),
+      productQuantity: serializer.fromJson<int>(json['productQuantity']),
+      productSellingPrice:
+          serializer.fromJson<int>(json['productSellingPrice']),
+      totalOrdersQuantity:
+          serializer.fromJson<int>(json['totalOrdersQuantity']),
+      totalOrdersSellingPrice:
+          serializer.fromJson<int>(json['totalOrdersSellingPrice']),
+      deliveryDate: serializer.fromJson<DateTime>(json['deliveryDate']),
+      customer: serializer.fromJson<String>(json['customer']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
   }
   @override
@@ -487,129 +549,169 @@ class Order extends DataClass implements Insertable<Order> {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'id': serializer.toJson<int>(id),
-      'name': serializer.toJson<String>(name),
-      'expectedDelivery': serializer.toJson<String>(expectedDelivery),
-      'unit': serializer.toJson<String>(unit),
-      'orderValue': serializer.toJson<int>(orderValue),
-      'quantity': serializer.toJson<int>(quantity),
-      'orderId': serializer.toJson<int>(orderId),
+      'productName': serializer.toJson<String>(productName),
+      'productQuantity': serializer.toJson<int>(productQuantity),
+      'productSellingPrice': serializer.toJson<int>(productSellingPrice),
+      'totalOrdersQuantity': serializer.toJson<int>(totalOrdersQuantity),
+      'totalOrdersSellingPrice':
+          serializer.toJson<int>(totalOrdersSellingPrice),
+      'deliveryDate': serializer.toJson<DateTime>(deliveryDate),
+      'customer': serializer.toJson<String>(customer),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
     };
   }
 
   Order copyWith(
           {int? id,
-          String? name,
-          String? expectedDelivery,
-          String? unit,
-          int? orderValue,
-          int? quantity,
-          int? orderId}) =>
+          String? productName,
+          int? productQuantity,
+          int? productSellingPrice,
+          int? totalOrdersQuantity,
+          int? totalOrdersSellingPrice,
+          DateTime? deliveryDate,
+          String? customer,
+          DateTime? createdAt}) =>
       Order(
         id: id ?? this.id,
-        name: name ?? this.name,
-        expectedDelivery: expectedDelivery ?? this.expectedDelivery,
-        unit: unit ?? this.unit,
-        orderValue: orderValue ?? this.orderValue,
-        quantity: quantity ?? this.quantity,
-        orderId: orderId ?? this.orderId,
+        productName: productName ?? this.productName,
+        productQuantity: productQuantity ?? this.productQuantity,
+        productSellingPrice: productSellingPrice ?? this.productSellingPrice,
+        totalOrdersQuantity: totalOrdersQuantity ?? this.totalOrdersQuantity,
+        totalOrdersSellingPrice:
+            totalOrdersSellingPrice ?? this.totalOrdersSellingPrice,
+        deliveryDate: deliveryDate ?? this.deliveryDate,
+        customer: customer ?? this.customer,
+        createdAt: createdAt ?? this.createdAt,
       );
   @override
   String toString() {
     return (StringBuffer('Order(')
           ..write('id: $id, ')
-          ..write('name: $name, ')
-          ..write('expectedDelivery: $expectedDelivery, ')
-          ..write('unit: $unit, ')
-          ..write('orderValue: $orderValue, ')
-          ..write('quantity: $quantity, ')
-          ..write('orderId: $orderId')
+          ..write('productName: $productName, ')
+          ..write('productQuantity: $productQuantity, ')
+          ..write('productSellingPrice: $productSellingPrice, ')
+          ..write('totalOrdersQuantity: $totalOrdersQuantity, ')
+          ..write('totalOrdersSellingPrice: $totalOrdersSellingPrice, ')
+          ..write('deliveryDate: $deliveryDate, ')
+          ..write('customer: $customer, ')
+          ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
 
   @override
   int get hashCode => Object.hash(
-      id, name, expectedDelivery, unit, orderValue, quantity, orderId);
+      id,
+      productName,
+      productQuantity,
+      productSellingPrice,
+      totalOrdersQuantity,
+      totalOrdersSellingPrice,
+      deliveryDate,
+      customer,
+      createdAt);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
       (other is Order &&
           other.id == this.id &&
-          other.name == this.name &&
-          other.expectedDelivery == this.expectedDelivery &&
-          other.unit == this.unit &&
-          other.orderValue == this.orderValue &&
-          other.quantity == this.quantity &&
-          other.orderId == this.orderId);
+          other.productName == this.productName &&
+          other.productQuantity == this.productQuantity &&
+          other.productSellingPrice == this.productSellingPrice &&
+          other.totalOrdersQuantity == this.totalOrdersQuantity &&
+          other.totalOrdersSellingPrice == this.totalOrdersSellingPrice &&
+          other.deliveryDate == this.deliveryDate &&
+          other.customer == this.customer &&
+          other.createdAt == this.createdAt);
 }
 
 class OrdersCompanion extends UpdateCompanion<Order> {
   final Value<int> id;
-  final Value<String> name;
-  final Value<String> expectedDelivery;
-  final Value<String> unit;
-  final Value<int> orderValue;
-  final Value<int> quantity;
-  final Value<int> orderId;
+  final Value<String> productName;
+  final Value<int> productQuantity;
+  final Value<int> productSellingPrice;
+  final Value<int> totalOrdersQuantity;
+  final Value<int> totalOrdersSellingPrice;
+  final Value<DateTime> deliveryDate;
+  final Value<String> customer;
+  final Value<DateTime> createdAt;
   const OrdersCompanion({
     this.id = const Value.absent(),
-    this.name = const Value.absent(),
-    this.expectedDelivery = const Value.absent(),
-    this.unit = const Value.absent(),
-    this.orderValue = const Value.absent(),
-    this.quantity = const Value.absent(),
-    this.orderId = const Value.absent(),
+    this.productName = const Value.absent(),
+    this.productQuantity = const Value.absent(),
+    this.productSellingPrice = const Value.absent(),
+    this.totalOrdersQuantity = const Value.absent(),
+    this.totalOrdersSellingPrice = const Value.absent(),
+    this.deliveryDate = const Value.absent(),
+    this.customer = const Value.absent(),
+    this.createdAt = const Value.absent(),
   });
   OrdersCompanion.insert({
     this.id = const Value.absent(),
-    required String name,
-    required String expectedDelivery,
-    required String unit,
-    required int orderValue,
-    required int quantity,
-    required int orderId,
-  })  : name = Value(name),
-        expectedDelivery = Value(expectedDelivery),
-        unit = Value(unit),
-        orderValue = Value(orderValue),
-        quantity = Value(quantity),
-        orderId = Value(orderId);
+    required String productName,
+    required int productQuantity,
+    required int productSellingPrice,
+    required int totalOrdersQuantity,
+    required int totalOrdersSellingPrice,
+    required DateTime deliveryDate,
+    required String customer,
+    required DateTime createdAt,
+  })  : productName = Value(productName),
+        productQuantity = Value(productQuantity),
+        productSellingPrice = Value(productSellingPrice),
+        totalOrdersQuantity = Value(totalOrdersQuantity),
+        totalOrdersSellingPrice = Value(totalOrdersSellingPrice),
+        deliveryDate = Value(deliveryDate),
+        customer = Value(customer),
+        createdAt = Value(createdAt);
   static Insertable<Order> custom({
     Expression<int>? id,
-    Expression<String>? name,
-    Expression<String>? expectedDelivery,
-    Expression<String>? unit,
-    Expression<int>? orderValue,
-    Expression<int>? quantity,
-    Expression<int>? orderId,
+    Expression<String>? productName,
+    Expression<int>? productQuantity,
+    Expression<int>? productSellingPrice,
+    Expression<int>? totalOrdersQuantity,
+    Expression<int>? totalOrdersSellingPrice,
+    Expression<DateTime>? deliveryDate,
+    Expression<String>? customer,
+    Expression<DateTime>? createdAt,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
-      if (name != null) 'name': name,
-      if (expectedDelivery != null) 'expected_delivery': expectedDelivery,
-      if (unit != null) 'unit': unit,
-      if (orderValue != null) 'order_value': orderValue,
-      if (quantity != null) 'quantity': quantity,
-      if (orderId != null) 'order_id': orderId,
+      if (productName != null) 'product_name': productName,
+      if (productQuantity != null) 'product_quantity': productQuantity,
+      if (productSellingPrice != null)
+        'product_selling_price': productSellingPrice,
+      if (totalOrdersQuantity != null)
+        'total_orders_quantity': totalOrdersQuantity,
+      if (totalOrdersSellingPrice != null)
+        'total_orders_selling_price': totalOrdersSellingPrice,
+      if (deliveryDate != null) 'delivery_date': deliveryDate,
+      if (customer != null) 'customer': customer,
+      if (createdAt != null) 'created_at': createdAt,
     });
   }
 
   OrdersCompanion copyWith(
       {Value<int>? id,
-      Value<String>? name,
-      Value<String>? expectedDelivery,
-      Value<String>? unit,
-      Value<int>? orderValue,
-      Value<int>? quantity,
-      Value<int>? orderId}) {
+      Value<String>? productName,
+      Value<int>? productQuantity,
+      Value<int>? productSellingPrice,
+      Value<int>? totalOrdersQuantity,
+      Value<int>? totalOrdersSellingPrice,
+      Value<DateTime>? deliveryDate,
+      Value<String>? customer,
+      Value<DateTime>? createdAt}) {
     return OrdersCompanion(
       id: id ?? this.id,
-      name: name ?? this.name,
-      expectedDelivery: expectedDelivery ?? this.expectedDelivery,
-      unit: unit ?? this.unit,
-      orderValue: orderValue ?? this.orderValue,
-      quantity: quantity ?? this.quantity,
-      orderId: orderId ?? this.orderId,
+      productName: productName ?? this.productName,
+      productQuantity: productQuantity ?? this.productQuantity,
+      productSellingPrice: productSellingPrice ?? this.productSellingPrice,
+      totalOrdersQuantity: totalOrdersQuantity ?? this.totalOrdersQuantity,
+      totalOrdersSellingPrice:
+          totalOrdersSellingPrice ?? this.totalOrdersSellingPrice,
+      deliveryDate: deliveryDate ?? this.deliveryDate,
+      customer: customer ?? this.customer,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 
@@ -619,23 +721,30 @@ class OrdersCompanion extends UpdateCompanion<Order> {
     if (id.present) {
       map['id'] = Variable<int>(id.value);
     }
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
+    if (productName.present) {
+      map['product_name'] = Variable<String>(productName.value);
     }
-    if (expectedDelivery.present) {
-      map['expected_delivery'] = Variable<String>(expectedDelivery.value);
+    if (productQuantity.present) {
+      map['product_quantity'] = Variable<int>(productQuantity.value);
     }
-    if (unit.present) {
-      map['unit'] = Variable<String>(unit.value);
+    if (productSellingPrice.present) {
+      map['product_selling_price'] = Variable<int>(productSellingPrice.value);
     }
-    if (orderValue.present) {
-      map['order_value'] = Variable<int>(orderValue.value);
+    if (totalOrdersQuantity.present) {
+      map['total_orders_quantity'] = Variable<int>(totalOrdersQuantity.value);
     }
-    if (quantity.present) {
-      map['quantity'] = Variable<int>(quantity.value);
+    if (totalOrdersSellingPrice.present) {
+      map['total_orders_selling_price'] =
+          Variable<int>(totalOrdersSellingPrice.value);
     }
-    if (orderId.present) {
-      map['order_id'] = Variable<int>(orderId.value);
+    if (deliveryDate.present) {
+      map['delivery_date'] = Variable<DateTime>(deliveryDate.value);
+    }
+    if (customer.present) {
+      map['customer'] = Variable<String>(customer.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
     }
     return map;
   }
@@ -644,12 +753,14 @@ class OrdersCompanion extends UpdateCompanion<Order> {
   String toString() {
     return (StringBuffer('OrdersCompanion(')
           ..write('id: $id, ')
-          ..write('name: $name, ')
-          ..write('expectedDelivery: $expectedDelivery, ')
-          ..write('unit: $unit, ')
-          ..write('orderValue: $orderValue, ')
-          ..write('quantity: $quantity, ')
-          ..write('orderId: $orderId')
+          ..write('productName: $productName, ')
+          ..write('productQuantity: $productQuantity, ')
+          ..write('productSellingPrice: $productSellingPrice, ')
+          ..write('totalOrdersQuantity: $totalOrdersQuantity, ')
+          ..write('totalOrdersSellingPrice: $totalOrdersSellingPrice, ')
+          ..write('deliveryDate: $deliveryDate, ')
+          ..write('customer: $customer, ')
+          ..write('createdAt: $createdAt')
           ..write(')'))
         .toString();
   }
@@ -1383,16 +1494,433 @@ class SuppliersCompanion extends UpdateCompanion<Supplier> {
   }
 }
 
+class $OrdersListTable extends OrdersList
+    with TableInfo<$OrdersListTable, OrdersListData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $OrdersListTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _idOrdersMeta =
+      const VerificationMeta('idOrders');
+  @override
+  late final GeneratedColumn<int> idOrders = GeneratedColumn<int>(
+      'id_orders', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _productCodeMeta =
+      const VerificationMeta('productCode');
+  @override
+  late final GeneratedColumn<String> productCode = GeneratedColumn<String>(
+      'product_code', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _productNameMeta =
+      const VerificationMeta('productName');
+  @override
+  late final GeneratedColumn<String> productName = GeneratedColumn<String>(
+      'product_name', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _originalPriceMeta =
+      const VerificationMeta('originalPrice');
+  @override
+  late final GeneratedColumn<int> originalPrice = GeneratedColumn<int>(
+      'original_price', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _sellingPriceMeta =
+      const VerificationMeta('sellingPrice');
+  @override
+  late final GeneratedColumn<int> sellingPrice = GeneratedColumn<int>(
+      'selling_price', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _quantityMeta =
+      const VerificationMeta('quantity');
+  @override
+  late final GeneratedColumn<int> quantity = GeneratedColumn<int>(
+      'quantity', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _createdAtMeta =
+      const VerificationMeta('createdAt');
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+      'created_at', aliasedName, false,
+      type: DriftSqlType.dateTime, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns => [
+        id,
+        idOrders,
+        productCode,
+        productName,
+        originalPrice,
+        sellingPrice,
+        quantity,
+        createdAt
+      ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'orders_list';
+  @override
+  VerificationContext validateIntegrity(Insertable<OrdersListData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('id_orders')) {
+      context.handle(_idOrdersMeta,
+          idOrders.isAcceptableOrUnknown(data['id_orders']!, _idOrdersMeta));
+    } else if (isInserting) {
+      context.missing(_idOrdersMeta);
+    }
+    if (data.containsKey('product_code')) {
+      context.handle(
+          _productCodeMeta,
+          productCode.isAcceptableOrUnknown(
+              data['product_code']!, _productCodeMeta));
+    } else if (isInserting) {
+      context.missing(_productCodeMeta);
+    }
+    if (data.containsKey('product_name')) {
+      context.handle(
+          _productNameMeta,
+          productName.isAcceptableOrUnknown(
+              data['product_name']!, _productNameMeta));
+    } else if (isInserting) {
+      context.missing(_productNameMeta);
+    }
+    if (data.containsKey('original_price')) {
+      context.handle(
+          _originalPriceMeta,
+          originalPrice.isAcceptableOrUnknown(
+              data['original_price']!, _originalPriceMeta));
+    } else if (isInserting) {
+      context.missing(_originalPriceMeta);
+    }
+    if (data.containsKey('selling_price')) {
+      context.handle(
+          _sellingPriceMeta,
+          sellingPrice.isAcceptableOrUnknown(
+              data['selling_price']!, _sellingPriceMeta));
+    } else if (isInserting) {
+      context.missing(_sellingPriceMeta);
+    }
+    if (data.containsKey('quantity')) {
+      context.handle(_quantityMeta,
+          quantity.isAcceptableOrUnknown(data['quantity']!, _quantityMeta));
+    } else if (isInserting) {
+      context.missing(_quantityMeta);
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(_createdAtMeta,
+          createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta));
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  OrdersListData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return OrdersListData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      idOrders: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id_orders'])!,
+      productCode: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}product_code'])!,
+      productName: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}product_name'])!,
+      originalPrice: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}original_price'])!,
+      sellingPrice: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}selling_price'])!,
+      quantity: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}quantity'])!,
+      createdAt: attachedDatabase.typeMapping
+          .read(DriftSqlType.dateTime, data['${effectivePrefix}created_at'])!,
+    );
+  }
+
+  @override
+  $OrdersListTable createAlias(String alias) {
+    return $OrdersListTable(attachedDatabase, alias);
+  }
+}
+
+class OrdersListData extends DataClass implements Insertable<OrdersListData> {
+  final int id;
+  final int idOrders;
+  final String productCode;
+  final String productName;
+  final int originalPrice;
+  final int sellingPrice;
+  final int quantity;
+  final DateTime createdAt;
+  const OrdersListData(
+      {required this.id,
+      required this.idOrders,
+      required this.productCode,
+      required this.productName,
+      required this.originalPrice,
+      required this.sellingPrice,
+      required this.quantity,
+      required this.createdAt});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['id_orders'] = Variable<int>(idOrders);
+    map['product_code'] = Variable<String>(productCode);
+    map['product_name'] = Variable<String>(productName);
+    map['original_price'] = Variable<int>(originalPrice);
+    map['selling_price'] = Variable<int>(sellingPrice);
+    map['quantity'] = Variable<int>(quantity);
+    map['created_at'] = Variable<DateTime>(createdAt);
+    return map;
+  }
+
+  OrdersListCompanion toCompanion(bool nullToAbsent) {
+    return OrdersListCompanion(
+      id: Value(id),
+      idOrders: Value(idOrders),
+      productCode: Value(productCode),
+      productName: Value(productName),
+      originalPrice: Value(originalPrice),
+      sellingPrice: Value(sellingPrice),
+      quantity: Value(quantity),
+      createdAt: Value(createdAt),
+    );
+  }
+
+  factory OrdersListData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return OrdersListData(
+      id: serializer.fromJson<int>(json['id']),
+      idOrders: serializer.fromJson<int>(json['idOrders']),
+      productCode: serializer.fromJson<String>(json['productCode']),
+      productName: serializer.fromJson<String>(json['productName']),
+      originalPrice: serializer.fromJson<int>(json['originalPrice']),
+      sellingPrice: serializer.fromJson<int>(json['sellingPrice']),
+      quantity: serializer.fromJson<int>(json['quantity']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'idOrders': serializer.toJson<int>(idOrders),
+      'productCode': serializer.toJson<String>(productCode),
+      'productName': serializer.toJson<String>(productName),
+      'originalPrice': serializer.toJson<int>(originalPrice),
+      'sellingPrice': serializer.toJson<int>(sellingPrice),
+      'quantity': serializer.toJson<int>(quantity),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+    };
+  }
+
+  OrdersListData copyWith(
+          {int? id,
+          int? idOrders,
+          String? productCode,
+          String? productName,
+          int? originalPrice,
+          int? sellingPrice,
+          int? quantity,
+          DateTime? createdAt}) =>
+      OrdersListData(
+        id: id ?? this.id,
+        idOrders: idOrders ?? this.idOrders,
+        productCode: productCode ?? this.productCode,
+        productName: productName ?? this.productName,
+        originalPrice: originalPrice ?? this.originalPrice,
+        sellingPrice: sellingPrice ?? this.sellingPrice,
+        quantity: quantity ?? this.quantity,
+        createdAt: createdAt ?? this.createdAt,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('OrdersListData(')
+          ..write('id: $id, ')
+          ..write('idOrders: $idOrders, ')
+          ..write('productCode: $productCode, ')
+          ..write('productName: $productName, ')
+          ..write('originalPrice: $originalPrice, ')
+          ..write('sellingPrice: $sellingPrice, ')
+          ..write('quantity: $quantity, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, idOrders, productCode, productName,
+      originalPrice, sellingPrice, quantity, createdAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is OrdersListData &&
+          other.id == this.id &&
+          other.idOrders == this.idOrders &&
+          other.productCode == this.productCode &&
+          other.productName == this.productName &&
+          other.originalPrice == this.originalPrice &&
+          other.sellingPrice == this.sellingPrice &&
+          other.quantity == this.quantity &&
+          other.createdAt == this.createdAt);
+}
+
+class OrdersListCompanion extends UpdateCompanion<OrdersListData> {
+  final Value<int> id;
+  final Value<int> idOrders;
+  final Value<String> productCode;
+  final Value<String> productName;
+  final Value<int> originalPrice;
+  final Value<int> sellingPrice;
+  final Value<int> quantity;
+  final Value<DateTime> createdAt;
+  const OrdersListCompanion({
+    this.id = const Value.absent(),
+    this.idOrders = const Value.absent(),
+    this.productCode = const Value.absent(),
+    this.productName = const Value.absent(),
+    this.originalPrice = const Value.absent(),
+    this.sellingPrice = const Value.absent(),
+    this.quantity = const Value.absent(),
+    this.createdAt = const Value.absent(),
+  });
+  OrdersListCompanion.insert({
+    this.id = const Value.absent(),
+    required int idOrders,
+    required String productCode,
+    required String productName,
+    required int originalPrice,
+    required int sellingPrice,
+    required int quantity,
+    required DateTime createdAt,
+  })  : idOrders = Value(idOrders),
+        productCode = Value(productCode),
+        productName = Value(productName),
+        originalPrice = Value(originalPrice),
+        sellingPrice = Value(sellingPrice),
+        quantity = Value(quantity),
+        createdAt = Value(createdAt);
+  static Insertable<OrdersListData> custom({
+    Expression<int>? id,
+    Expression<int>? idOrders,
+    Expression<String>? productCode,
+    Expression<String>? productName,
+    Expression<int>? originalPrice,
+    Expression<int>? sellingPrice,
+    Expression<int>? quantity,
+    Expression<DateTime>? createdAt,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (idOrders != null) 'id_orders': idOrders,
+      if (productCode != null) 'product_code': productCode,
+      if (productName != null) 'product_name': productName,
+      if (originalPrice != null) 'original_price': originalPrice,
+      if (sellingPrice != null) 'selling_price': sellingPrice,
+      if (quantity != null) 'quantity': quantity,
+      if (createdAt != null) 'created_at': createdAt,
+    });
+  }
+
+  OrdersListCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? idOrders,
+      Value<String>? productCode,
+      Value<String>? productName,
+      Value<int>? originalPrice,
+      Value<int>? sellingPrice,
+      Value<int>? quantity,
+      Value<DateTime>? createdAt}) {
+    return OrdersListCompanion(
+      id: id ?? this.id,
+      idOrders: idOrders ?? this.idOrders,
+      productCode: productCode ?? this.productCode,
+      productName: productName ?? this.productName,
+      originalPrice: originalPrice ?? this.originalPrice,
+      sellingPrice: sellingPrice ?? this.sellingPrice,
+      quantity: quantity ?? this.quantity,
+      createdAt: createdAt ?? this.createdAt,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (idOrders.present) {
+      map['id_orders'] = Variable<int>(idOrders.value);
+    }
+    if (productCode.present) {
+      map['product_code'] = Variable<String>(productCode.value);
+    }
+    if (productName.present) {
+      map['product_name'] = Variable<String>(productName.value);
+    }
+    if (originalPrice.present) {
+      map['original_price'] = Variable<int>(originalPrice.value);
+    }
+    if (sellingPrice.present) {
+      map['selling_price'] = Variable<int>(sellingPrice.value);
+    }
+    if (quantity.present) {
+      map['quantity'] = Variable<int>(quantity.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('OrdersListCompanion(')
+          ..write('id: $id, ')
+          ..write('idOrders: $idOrders, ')
+          ..write('productCode: $productCode, ')
+          ..write('productName: $productName, ')
+          ..write('originalPrice: $originalPrice, ')
+          ..write('sellingPrice: $sellingPrice, ')
+          ..write('quantity: $quantity, ')
+          ..write('createdAt: $createdAt')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   late final $CustomersTable customers = $CustomersTable(this);
   late final $OrdersTable orders = $OrdersTable(this);
   late final $ProductsTable products = $ProductsTable(this);
   late final $SuppliersTable suppliers = $SuppliersTable(this);
+  late final $OrdersListTable ordersList = $OrdersListTable(this);
+  late final ProductsDao productsDao = ProductsDao(this as AppDatabase);
+  late final OrdersDao ordersDao = OrdersDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [customers, orders, products, suppliers];
+      [customers, orders, products, suppliers, ordersList];
 }

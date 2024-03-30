@@ -11,12 +11,14 @@ class CustomDialog extends StatefulWidget {
   final List<Widget> content;
   final Function onPressConfirm;
   final Function onPressCancel;
+  final bool shouldShowFooter;
 
   const CustomDialog({
     Key? key,
     this.width = 500,
     this.height = 550,
     this.content = const [],
+    this.shouldShowFooter = true,
     required this.title,
     required this.textConfirm,
     required this.textCancel,
@@ -53,33 +55,38 @@ class _CustomDialogState extends State<CustomDialog> {
           ),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(top: 12, bottom: 32),
+              padding: EdgeInsets.only(
+                top: 12,
+                bottom: widget.shouldShowFooter ? 32 : 0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [...widget.content],
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Wrap(spacing: 12, children: [
-                Button(
-                  onPress: () => widget.onPressCancel(),
-                  text: widget.textCancel,
-                  backgroundColor: Colors.white,
-                  borderColor: const Color.fromRGBO(133, 141, 157, 1),
-                  textColor: const Color.fromRGBO(133, 141, 157, 1),
-                ),
-                Button(
-                  onPress: () => widget.onPressConfirm(),
-                  text: widget.textConfirm,
-                  backgroundColor: const Color.fromRGBO(19, 102, 217, 1),
-                  textColor: Colors.white,
-                )
-              ])
-            ],
-          )
+          Visibility(
+              visible: widget.shouldShowFooter,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Wrap(spacing: 12, children: [
+                    Button(
+                      onPress: () => widget.onPressCancel(),
+                      text: widget.textCancel,
+                      backgroundColor: Colors.white,
+                      borderColor: const Color.fromRGBO(133, 141, 157, 1),
+                      textColor: const Color.fromRGBO(133, 141, 157, 1),
+                    ),
+                    Button(
+                      onPress: () => widget.onPressConfirm(),
+                      text: widget.textConfirm,
+                      backgroundColor: const Color.fromRGBO(19, 102, 217, 1),
+                      textColor: Colors.white,
+                    )
+                  ])
+                ],
+              ))
         ]),
       ),
     );

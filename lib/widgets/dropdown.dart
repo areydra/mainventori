@@ -8,7 +8,7 @@ class Dropdown extends StatefulWidget {
   final TextEditingController selectedValue;
   final List<String> dropdownItems;
   final bool isError;
-  final Function(String?) onChangeValue;
+  final Function(String) onChangeValue;
 
   const Dropdown({
     Key? key,
@@ -111,7 +111,7 @@ class _DialogDropdownState extends State<Dropdown> {
                   setState(() {
                     widget.selectedValue.text = newValue ?? "";
                   });
-                  widget.onChangeValue(newValue);
+                  widget.onChangeValue(newValue!);
                 },
                 items: widget.dropdownItems
                     .map<DropdownMenuItem<String>>((String value) {
