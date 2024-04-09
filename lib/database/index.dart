@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:drift/native.dart';
 import 'package:drift/drift.dart';
 import 'package:mainventori/database/daos/orders.dart';
+import 'package:mainventori/database/daos/orders_list.dart';
 import 'package:mainventori/database/daos/products.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
@@ -20,7 +21,7 @@ part 'index.g.dart';
 
 @DriftDatabase(
     tables: [Customers, Orders, Products, Suppliers, OrdersList],
-    daos: [ProductsDao, OrdersDao])
+    daos: [ProductsDao, OrdersDao, OrdersListDao])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 

@@ -38,14 +38,16 @@ class _AddNewOrderDialogState extends ConsumerState<AddNewOrderDialog> {
       onPressConfirm: () {},
       shouldShowFooter: false,
       onPressCancel: SmartDialog.dismiss,
-      content: const [
+      content: [
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              AddNewOrderDialogHeader(),
-              AddNewOrderDialogContent(),
-              AddNewOrderDialogFooter(),
+              const AddNewOrderDialogHeader(),
+              const AddNewOrderDialogContent(),
+              AddNewOrderDialogFooter(
+                refreshDataOrders: widget.refreshDataOrders,
+              ),
             ],
           ),
         ),

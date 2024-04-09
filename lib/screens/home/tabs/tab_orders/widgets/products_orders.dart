@@ -5,6 +5,8 @@ import 'package:mainventori/database/daos/orders.dart';
 import 'package:mainventori/database/index.dart';
 import 'package:mainventori/screens/home/tabs/tab_inventory/widgets/content/widget/footer.dart';
 import 'package:mainventori/screens/home/tabs/tab_orders/widgets/add_new_order_dialog/index.dart';
+import 'package:mainventori/screens/home/tabs/tab_orders/widgets/detail_orders_dialog.dart';
+import 'package:mainventori/widgets/button.dart';
 import 'package:mainventori/widgets/separator_horizontal.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 
@@ -98,10 +100,14 @@ class _ProductsOrdersState extends ConsumerState<ProductsOrders> {
   void initState() {
     super.initState();
 
-    getOrdersData(currentPageNumber, searchQuery);
+    getOrdersData(
+      currentPageNumber: currentPageNumber,
+      searchQuery: searchQuery,
+    );
   }
 
-  Future<void> getOrdersData(currentPageNumber, searchQuery) async {
+  Future<void> getOrdersData(
+      {int currentPageNumber = 0, String searchQuery = ''}) async {
     DaosGetItemsPerPage fetchOrders = await database.ordersDao
         .getItemsPerPage(currentPageNumber, limitPerPage, searchQuery);
 
@@ -110,13 +116,13 @@ class _ProductsOrdersState extends ConsumerState<ProductsOrders> {
 
     setState(() {
       orders = fetchOrders.orders;
-      currentPageNumber = fetchOrders.currentPageNumber;
+      this.currentPageNumber = fetchOrders.currentPageNumber;
       totalPageNumber = fetchTotalPageNumber;
     });
   }
 
   void searchDataOrders(String query) {
-    getOrdersData(0, query);
+    getOrdersData(currentPageNumber: 0, searchQuery: query);
     setState(() {
       searchQuery = query;
     });
@@ -188,24 +194,18 @@ class _ProductsOrdersState extends ConsumerState<ProductsOrders> {
                       ),
                     ),
                     const SizedBox(width: 14),
-                    TextButton(
-                        style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                                const Color.fromRGBO(19, 102, 217, 1)),
-                            foregroundColor:
-                                MaterialStateProperty.all<Color>(Colors.white),
-                            padding: MaterialStateProperty.all<EdgeInsets>(
-                                const EdgeInsets.symmetric(
-                                    vertical: 20, horizontal: 26))),
-                        onPressed: () {
-                          SmartDialog.show(builder: (_) {
-                            return AddNewOrderDialog(refreshDataOrders: () {});
-                          });
-                        },
-                        child: const Text(
-                          'Add Order',
-                          style: TextStyle(fontSize: 14),
-                        )),
+                    Button(
+                      onPress: () => {
+                        SmartDialog.show(builder: (_) {
+                          return AddNewOrderDialog(
+                            refreshDataOrders: getOrdersData,
+                          );
+                        })
+                      },
+                      text: 'Add Order',
+                      backgroundColor: const Color.fromRGBO(19, 102, 217, 1),
+                      textColor: Colors.white,
+                    ),
                   ],
                 ),
               ],
@@ -268,6 +268,9 @@ class _ProductsOrdersState extends ConsumerState<ProductsOrders> {
                         fontWeight: FontWeight.w500),
                   ),
                 ),
+                SizedBox(
+                  width: 100,
+                )
               ],
             ),
           ),
@@ -353,6 +356,23 @@ class _ProductsOrdersState extends ConsumerState<ProductsOrders> {
                                   fontWeight: FontWeight.w500),
                             ),
                           ),
+                          SizedBox(
+                            width: 100,
+                            child: Button(
+                              text: 'Details',
+                              textColor: Colors.white,
+                              backgroundColor:
+                                  const Color.fromRGBO(225, 131, 8, 1),
+                              onPress: () {
+                                SmartDialog.show(builder: (_) {
+                                  return DetailOrdersDialog(
+                                    order: orders[index],
+                                    refreshDataProducts: () {},
+                                  );
+                                });
+                              },
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -367,18 +387,25 @@ class _ProductsOrdersState extends ConsumerState<ProductsOrders> {
             ),
           ),
           Footer(
-              currentPage: currentPageNumber,
-              totalPage: totalPageNumber,
-              onPressNextPage: () {
-                if ((currentPageNumber + 1) < totalPageNumber) {
-                  getOrdersData(currentPageNumber + 1, searchQuery);
-                }
-              },
-              onPressPreviousPage: () {
-                if (currentPageNumber > 0) {
-                  getOrdersData(currentPageNumber - 1, searchQuery);
-                }
-              }),
+            currentPage: currentPageNumber,
+            totalPage: totalPageNumber,
+            onPressNextPage: () {
+              if ((currentPageNumber + 1) < totalPageNumber) {
+                getOrdersData(
+                  currentPageNumber: currentPageNumber + 1,
+                  searchQuery: searchQuery,
+                );
+              }
+            },
+            onPressPreviousPage: () {
+              if (currentPageNumber > 0) {
+                getOrdersData(
+                  currentPageNumber: currentPageNumber - 1,
+                  searchQuery: searchQuery,
+                );
+              }
+            },
+          ),
         ],
       ),
     );

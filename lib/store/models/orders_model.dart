@@ -9,6 +9,7 @@ class OrdersModel extends ChangeNotifier {
   final database = AppDatabase();
 
   bool isSaving = false;
+  bool isSaved = false;
   List<OrderListController> orders = [];
   List<List<String>> ordersListError = [];
   TextEditingController textControllerDeliveryDate = TextEditingController();
@@ -196,12 +197,14 @@ class OrdersModel extends ChangeNotifier {
     return isFieldValid;
   }
 
-  void saveToDatabase() async {
+  Future<bool> saveToDatabase() async {
     isSaving = true;
+    isSaved = false;
+
     if (!validation()) {
       isSaving = false;
       notifyListeners();
-      return;
+      return isSaved;
     }
 
     List<OrdersListCompanion> ordersListCompanion = [];
@@ -236,6 +239,7 @@ class OrdersModel extends ChangeNotifier {
     await database.batch((batch) {
       batch.insertAll(database.ordersList, ordersListCompanion);
     }).then((_) async {
+      isSaved = true;
       SmartDialog.dismiss();
     }).catchError((error) async {
       SmartDialog.show(builder: (context) {
@@ -260,5 +264,7 @@ class OrdersModel extends ChangeNotifier {
       isSaving = false;
       notifyListeners();
     });
+
+    return isSaved;
   }
 }

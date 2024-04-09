@@ -7,7 +7,12 @@ import 'package:mainventori/widgets/dropdown.dart';
 import 'package:mainventori/widgets/separator_vertical.dart';
 
 class AddNewOrderDialogFooter extends ConsumerStatefulWidget {
-  const AddNewOrderDialogFooter({super.key});
+  final Function refreshDataOrders;
+
+  const AddNewOrderDialogFooter({
+    Key? key,
+    required this.refreshDataOrders,
+  }) : super(key: key);
 
   @override
   ConsumerState<AddNewOrderDialogFooter> createState() =>
@@ -86,7 +91,13 @@ class _AddNewOrderDialogFooterState
                 Padding(
                   padding: const EdgeInsets.only(top: 18),
                   child: Button(
-                    onPress: orderAction.saveToDatabase,
+                    onPress: () {
+                      orderAction.saveToDatabase().then((isSuccess) {
+                        if (isSuccess) {
+                          widget.refreshDataOrders();
+                        }
+                      });
+                    },
                     text: isSaving ? 'Adding Order...' : 'Add Order',
                     backgroundColor: const Color.fromRGBO(19, 102, 217, 1),
                     textColor: Colors.white,
