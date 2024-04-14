@@ -21,6 +21,7 @@ class TextInput extends StatefulWidget {
   void Function()? onEditingComplete;
   final CustomTextInputType? fieldType;
   final Color? textColor;
+  final bool obscureText;
 
   TextInput({
     Key? key,
@@ -32,6 +33,7 @@ class TextInput extends StatefulWidget {
     this.onChangeValue,
     this.onEditingComplete,
     this.isEnabled = true,
+    this.obscureText = false,
     this.fieldType = CustomTextInputType.text,
     this.textColor = const Color.fromRGBO(152, 159, 173, 1),
     TextEditingController? textController, // Make it nullable
@@ -72,6 +74,7 @@ class _FieldState extends State<TextInput> {
             children: [
               TextFormField(
                 controller: widget.textController,
+                obscureText: widget.obscureText,
                 decoration: InputDecoration(
                   filled: !widget.isEnabled,
                   fillColor: const Color.fromRGBO(240, 241, 243, 1),

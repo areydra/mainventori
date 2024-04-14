@@ -8,6 +8,7 @@ class Button extends StatelessWidget {
   final Color textColor;
   final Color? borderColor;
   final double borderRadius;
+  final double? width;
 
   Button({
     Key? key,
@@ -16,13 +17,16 @@ class Button extends StatelessWidget {
     required this.backgroundColor,
     required this.textColor,
     this.borderRadius = 8,
+    this.width,
     this.borderColor,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      style: ButtonStyle(
+    return SizedBox(
+      width: width,
+      child: TextButton(
+        style: ButtonStyle(
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(borderRadius),
@@ -32,11 +36,14 @@ class Button extends StatelessWidget {
           backgroundColor: MaterialStateProperty.all<Color>(backgroundColor),
           foregroundColor: MaterialStateProperty.all<Color>(textColor),
           padding: MaterialStateProperty.all<EdgeInsets>(
-              const EdgeInsets.symmetric(vertical: 20, horizontal: 26))),
-      onPressed: onPress,
-      child: Text(
-        text,
-        style: const TextStyle(fontSize: 14),
+            const EdgeInsets.symmetric(vertical: 20, horizontal: 26),
+          ),
+        ),
+        onPressed: onPress,
+        child: Text(
+          text,
+          style: const TextStyle(fontSize: 14),
+        ),
       ),
     );
   }
