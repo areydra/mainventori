@@ -7,6 +7,7 @@ class OrderListController {
   late TextEditingController sellingPrice;
   late TextEditingController quantity;
   late bool isError;
+  late int quantityLeft;
 
   OrderListController({
     required this.code,
@@ -15,5 +16,6 @@ class OrderListController {
     required this.sellingPrice,
     required this.quantity,
     required this.isError,
+    required this.quantityLeft,
   });
 }

@@ -30,6 +30,7 @@ class OrdersModel extends ChangeNotifier {
         sellingPrice: TextEditingController(),
         quantity: TextEditingController(),
         isError: false,
+        quantityLeft: 0,
       )
     ];
     ordersListError = [
@@ -84,6 +85,7 @@ class OrdersModel extends ChangeNotifier {
       sellingPrice: TextEditingController(),
       quantity: TextEditingController(),
       isError: false,
+      quantityLeft: 0,
     ));
     ordersListError.add([
       'code',
@@ -105,6 +107,8 @@ class OrdersModel extends ChangeNotifier {
     orders[index].code.text = product.code;
     orders[index].name.text = product.name;
     orders[index].price.text = product.buyingPrice.toString();
+    orders[index].quantityLeft = product.quantity;
+
     onChangeValue(index, "code");
     onChangeValue(index, "name");
     onChangeValue(index, "price");
@@ -264,6 +268,16 @@ class OrdersModel extends ChangeNotifier {
       isSaving = false;
       notifyListeners();
     });
+
+    if (isSaved) {
+      for (var index = 0; index < orders.length; index++) {
+        database.update(database.products)
+          ..where((tbl) => tbl.code.equals(orders[index].code.text))
+          ..write(ProductsCompanion(
+              quantity: Value(orders[index].quantityLeft -
+                  int.parse(orders[index].quantity.text))));
+      }
+    }
 
     return isSaved;
   }
