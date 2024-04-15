@@ -1,14 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mainventori/store/index.dart';
 import 'package:sidebarx/sidebarx.dart';
 
-class Sidebar extends StatelessWidget {
+class Sidebar extends ConsumerWidget {
   final SidebarXController controller;
 
   const Sidebar({Key? key, required this.controller}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return SidebarX(
       controller: controller,
       theme: const SidebarXTheme(
@@ -67,9 +69,12 @@ class Sidebar extends StatelessWidget {
           icon: Icons.people,
           label: 'Customers',
         ),
-        const SidebarXItem(
+        SidebarXItem(
           icon: Icons.logout,
           label: 'Logout',
+          onTap: () {
+            ref.read(userStore.notifier).removeUser();
+          },
         ),
       ],
     );
