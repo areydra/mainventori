@@ -39,7 +39,10 @@ class _AddNewOrderDialogContentState
         }
       }
 
-      orderState.onChangeTotalOrdersSellingPrice(sellingPrice.toString());
+      orderState.onChangeTotalOrdersPrice(
+        sellingPrice.toString(),
+        buyingPrice.toString(),
+      );
       return {
         'buyingPrice': buyingPrice,
         'sellingPrice': sellingPrice,

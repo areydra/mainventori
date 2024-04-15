@@ -1908,6 +1908,661 @@ class OrdersListCompanion extends UpdateCompanion<OrdersListData> {
   }
 }
 
+class $SalesSummaryTable extends SalesSummary
+    with TableInfo<$SalesSummaryTable, SalesSummaryData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $SalesSummaryTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _revenueMeta =
+      const VerificationMeta('revenue');
+  @override
+  late final GeneratedColumn<int> revenue = GeneratedColumn<int>(
+      'revenue', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _costMeta = const VerificationMeta('cost');
+  @override
+  late final GeneratedColumn<int> cost = GeneratedColumn<int>(
+      'cost', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _quantityInHandMeta =
+      const VerificationMeta('quantityInHand');
+  @override
+  late final GeneratedColumn<int> quantityInHand = GeneratedColumn<int>(
+      'quantity_in_hand', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _quantitySoldMeta =
+      const VerificationMeta('quantitySold');
+  @override
+  late final GeneratedColumn<int> quantitySold = GeneratedColumn<int>(
+      'quantity_sold', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _monthMeta = const VerificationMeta('month');
+  @override
+  late final GeneratedColumn<String> month = GeneratedColumn<String>(
+      'month', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _yearMeta = const VerificationMeta('year');
+  @override
+  late final GeneratedColumn<String> year = GeneratedColumn<String>(
+      'year', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, revenue, cost, quantityInHand, quantitySold, month, year];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'sales_summary';
+  @override
+  VerificationContext validateIntegrity(Insertable<SalesSummaryData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('revenue')) {
+      context.handle(_revenueMeta,
+          revenue.isAcceptableOrUnknown(data['revenue']!, _revenueMeta));
+    } else if (isInserting) {
+      context.missing(_revenueMeta);
+    }
+    if (data.containsKey('cost')) {
+      context.handle(
+          _costMeta, cost.isAcceptableOrUnknown(data['cost']!, _costMeta));
+    } else if (isInserting) {
+      context.missing(_costMeta);
+    }
+    if (data.containsKey('quantity_in_hand')) {
+      context.handle(
+          _quantityInHandMeta,
+          quantityInHand.isAcceptableOrUnknown(
+              data['quantity_in_hand']!, _quantityInHandMeta));
+    } else if (isInserting) {
+      context.missing(_quantityInHandMeta);
+    }
+    if (data.containsKey('quantity_sold')) {
+      context.handle(
+          _quantitySoldMeta,
+          quantitySold.isAcceptableOrUnknown(
+              data['quantity_sold']!, _quantitySoldMeta));
+    } else if (isInserting) {
+      context.missing(_quantitySoldMeta);
+    }
+    if (data.containsKey('month')) {
+      context.handle(
+          _monthMeta, month.isAcceptableOrUnknown(data['month']!, _monthMeta));
+    } else if (isInserting) {
+      context.missing(_monthMeta);
+    }
+    if (data.containsKey('year')) {
+      context.handle(
+          _yearMeta, year.isAcceptableOrUnknown(data['year']!, _yearMeta));
+    } else if (isInserting) {
+      context.missing(_yearMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  SalesSummaryData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return SalesSummaryData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      revenue: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}revenue'])!,
+      cost: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}cost'])!,
+      quantityInHand: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}quantity_in_hand'])!,
+      quantitySold: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}quantity_sold'])!,
+      month: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}month'])!,
+      year: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}year'])!,
+    );
+  }
+
+  @override
+  $SalesSummaryTable createAlias(String alias) {
+    return $SalesSummaryTable(attachedDatabase, alias);
+  }
+}
+
+class SalesSummaryData extends DataClass
+    implements Insertable<SalesSummaryData> {
+  final int id;
+  final int revenue;
+  final int cost;
+  final int quantityInHand;
+  final int quantitySold;
+  final String month;
+  final String year;
+  const SalesSummaryData(
+      {required this.id,
+      required this.revenue,
+      required this.cost,
+      required this.quantityInHand,
+      required this.quantitySold,
+      required this.month,
+      required this.year});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['revenue'] = Variable<int>(revenue);
+    map['cost'] = Variable<int>(cost);
+    map['quantity_in_hand'] = Variable<int>(quantityInHand);
+    map['quantity_sold'] = Variable<int>(quantitySold);
+    map['month'] = Variable<String>(month);
+    map['year'] = Variable<String>(year);
+    return map;
+  }
+
+  SalesSummaryCompanion toCompanion(bool nullToAbsent) {
+    return SalesSummaryCompanion(
+      id: Value(id),
+      revenue: Value(revenue),
+      cost: Value(cost),
+      quantityInHand: Value(quantityInHand),
+      quantitySold: Value(quantitySold),
+      month: Value(month),
+      year: Value(year),
+    );
+  }
+
+  factory SalesSummaryData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return SalesSummaryData(
+      id: serializer.fromJson<int>(json['id']),
+      revenue: serializer.fromJson<int>(json['revenue']),
+      cost: serializer.fromJson<int>(json['cost']),
+      quantityInHand: serializer.fromJson<int>(json['quantityInHand']),
+      quantitySold: serializer.fromJson<int>(json['quantitySold']),
+      month: serializer.fromJson<String>(json['month']),
+      year: serializer.fromJson<String>(json['year']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'revenue': serializer.toJson<int>(revenue),
+      'cost': serializer.toJson<int>(cost),
+      'quantityInHand': serializer.toJson<int>(quantityInHand),
+      'quantitySold': serializer.toJson<int>(quantitySold),
+      'month': serializer.toJson<String>(month),
+      'year': serializer.toJson<String>(year),
+    };
+  }
+
+  SalesSummaryData copyWith(
+          {int? id,
+          int? revenue,
+          int? cost,
+          int? quantityInHand,
+          int? quantitySold,
+          String? month,
+          String? year}) =>
+      SalesSummaryData(
+        id: id ?? this.id,
+        revenue: revenue ?? this.revenue,
+        cost: cost ?? this.cost,
+        quantityInHand: quantityInHand ?? this.quantityInHand,
+        quantitySold: quantitySold ?? this.quantitySold,
+        month: month ?? this.month,
+        year: year ?? this.year,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('SalesSummaryData(')
+          ..write('id: $id, ')
+          ..write('revenue: $revenue, ')
+          ..write('cost: $cost, ')
+          ..write('quantityInHand: $quantityInHand, ')
+          ..write('quantitySold: $quantitySold, ')
+          ..write('month: $month, ')
+          ..write('year: $year')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, revenue, cost, quantityInHand, quantitySold, month, year);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is SalesSummaryData &&
+          other.id == this.id &&
+          other.revenue == this.revenue &&
+          other.cost == this.cost &&
+          other.quantityInHand == this.quantityInHand &&
+          other.quantitySold == this.quantitySold &&
+          other.month == this.month &&
+          other.year == this.year);
+}
+
+class SalesSummaryCompanion extends UpdateCompanion<SalesSummaryData> {
+  final Value<int> id;
+  final Value<int> revenue;
+  final Value<int> cost;
+  final Value<int> quantityInHand;
+  final Value<int> quantitySold;
+  final Value<String> month;
+  final Value<String> year;
+  const SalesSummaryCompanion({
+    this.id = const Value.absent(),
+    this.revenue = const Value.absent(),
+    this.cost = const Value.absent(),
+    this.quantityInHand = const Value.absent(),
+    this.quantitySold = const Value.absent(),
+    this.month = const Value.absent(),
+    this.year = const Value.absent(),
+  });
+  SalesSummaryCompanion.insert({
+    this.id = const Value.absent(),
+    required int revenue,
+    required int cost,
+    required int quantityInHand,
+    required int quantitySold,
+    required String month,
+    required String year,
+  })  : revenue = Value(revenue),
+        cost = Value(cost),
+        quantityInHand = Value(quantityInHand),
+        quantitySold = Value(quantitySold),
+        month = Value(month),
+        year = Value(year);
+  static Insertable<SalesSummaryData> custom({
+    Expression<int>? id,
+    Expression<int>? revenue,
+    Expression<int>? cost,
+    Expression<int>? quantityInHand,
+    Expression<int>? quantitySold,
+    Expression<String>? month,
+    Expression<String>? year,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (revenue != null) 'revenue': revenue,
+      if (cost != null) 'cost': cost,
+      if (quantityInHand != null) 'quantity_in_hand': quantityInHand,
+      if (quantitySold != null) 'quantity_sold': quantitySold,
+      if (month != null) 'month': month,
+      if (year != null) 'year': year,
+    });
+  }
+
+  SalesSummaryCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? revenue,
+      Value<int>? cost,
+      Value<int>? quantityInHand,
+      Value<int>? quantitySold,
+      Value<String>? month,
+      Value<String>? year}) {
+    return SalesSummaryCompanion(
+      id: id ?? this.id,
+      revenue: revenue ?? this.revenue,
+      cost: cost ?? this.cost,
+      quantityInHand: quantityInHand ?? this.quantityInHand,
+      quantitySold: quantitySold ?? this.quantitySold,
+      month: month ?? this.month,
+      year: year ?? this.year,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (revenue.present) {
+      map['revenue'] = Variable<int>(revenue.value);
+    }
+    if (cost.present) {
+      map['cost'] = Variable<int>(cost.value);
+    }
+    if (quantityInHand.present) {
+      map['quantity_in_hand'] = Variable<int>(quantityInHand.value);
+    }
+    if (quantitySold.present) {
+      map['quantity_sold'] = Variable<int>(quantitySold.value);
+    }
+    if (month.present) {
+      map['month'] = Variable<String>(month.value);
+    }
+    if (year.present) {
+      map['year'] = Variable<String>(year.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('SalesSummaryCompanion(')
+          ..write('id: $id, ')
+          ..write('revenue: $revenue, ')
+          ..write('cost: $cost, ')
+          ..write('quantityInHand: $quantityInHand, ')
+          ..write('quantitySold: $quantitySold, ')
+          ..write('month: $month, ')
+          ..write('year: $year')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $TopSellingStockTable extends TopSellingStock
+    with TableInfo<$TopSellingStockTable, TopSellingStockData> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $TopSellingStockTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+      'id', aliasedName, false,
+      hasAutoIncrement: true,
+      type: DriftSqlType.int,
+      requiredDuringInsert: false,
+      defaultConstraints:
+          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+  static const VerificationMeta _idProductMeta =
+      const VerificationMeta('idProduct');
+  @override
+  late final GeneratedColumn<int> idProduct = GeneratedColumn<int>(
+      'id_product', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _quantitySoldMeta =
+      const VerificationMeta('quantitySold');
+  @override
+  late final GeneratedColumn<int> quantitySold = GeneratedColumn<int>(
+      'quantity_sold', aliasedName, false,
+      type: DriftSqlType.int, requiredDuringInsert: true);
+  static const VerificationMeta _monthMeta = const VerificationMeta('month');
+  @override
+  late final GeneratedColumn<String> month = GeneratedColumn<String>(
+      'month', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  static const VerificationMeta _yearMeta = const VerificationMeta('year');
+  @override
+  late final GeneratedColumn<String> year = GeneratedColumn<String>(
+      'year', aliasedName, false,
+      type: DriftSqlType.string, requiredDuringInsert: true);
+  @override
+  List<GeneratedColumn> get $columns =>
+      [id, idProduct, quantitySold, month, year];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'top_selling_stock';
+  @override
+  VerificationContext validateIntegrity(
+      Insertable<TopSellingStockData> instance,
+      {bool isInserting = false}) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('id_product')) {
+      context.handle(_idProductMeta,
+          idProduct.isAcceptableOrUnknown(data['id_product']!, _idProductMeta));
+    } else if (isInserting) {
+      context.missing(_idProductMeta);
+    }
+    if (data.containsKey('quantity_sold')) {
+      context.handle(
+          _quantitySoldMeta,
+          quantitySold.isAcceptableOrUnknown(
+              data['quantity_sold']!, _quantitySoldMeta));
+    } else if (isInserting) {
+      context.missing(_quantitySoldMeta);
+    }
+    if (data.containsKey('month')) {
+      context.handle(
+          _monthMeta, month.isAcceptableOrUnknown(data['month']!, _monthMeta));
+    } else if (isInserting) {
+      context.missing(_monthMeta);
+    }
+    if (data.containsKey('year')) {
+      context.handle(
+          _yearMeta, year.isAcceptableOrUnknown(data['year']!, _yearMeta));
+    } else if (isInserting) {
+      context.missing(_yearMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  TopSellingStockData map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return TopSellingStockData(
+      id: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id'])!,
+      idProduct: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}id_product'])!,
+      quantitySold: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}quantity_sold'])!,
+      month: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}month'])!,
+      year: attachedDatabase.typeMapping
+          .read(DriftSqlType.string, data['${effectivePrefix}year'])!,
+    );
+  }
+
+  @override
+  $TopSellingStockTable createAlias(String alias) {
+    return $TopSellingStockTable(attachedDatabase, alias);
+  }
+}
+
+class TopSellingStockData extends DataClass
+    implements Insertable<TopSellingStockData> {
+  final int id;
+  final int idProduct;
+  final int quantitySold;
+  final String month;
+  final String year;
+  const TopSellingStockData(
+      {required this.id,
+      required this.idProduct,
+      required this.quantitySold,
+      required this.month,
+      required this.year});
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['id_product'] = Variable<int>(idProduct);
+    map['quantity_sold'] = Variable<int>(quantitySold);
+    map['month'] = Variable<String>(month);
+    map['year'] = Variable<String>(year);
+    return map;
+  }
+
+  TopSellingStockCompanion toCompanion(bool nullToAbsent) {
+    return TopSellingStockCompanion(
+      id: Value(id),
+      idProduct: Value(idProduct),
+      quantitySold: Value(quantitySold),
+      month: Value(month),
+      year: Value(year),
+    );
+  }
+
+  factory TopSellingStockData.fromJson(Map<String, dynamic> json,
+      {ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return TopSellingStockData(
+      id: serializer.fromJson<int>(json['id']),
+      idProduct: serializer.fromJson<int>(json['idProduct']),
+      quantitySold: serializer.fromJson<int>(json['quantitySold']),
+      month: serializer.fromJson<String>(json['month']),
+      year: serializer.fromJson<String>(json['year']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'idProduct': serializer.toJson<int>(idProduct),
+      'quantitySold': serializer.toJson<int>(quantitySold),
+      'month': serializer.toJson<String>(month),
+      'year': serializer.toJson<String>(year),
+    };
+  }
+
+  TopSellingStockData copyWith(
+          {int? id,
+          int? idProduct,
+          int? quantitySold,
+          String? month,
+          String? year}) =>
+      TopSellingStockData(
+        id: id ?? this.id,
+        idProduct: idProduct ?? this.idProduct,
+        quantitySold: quantitySold ?? this.quantitySold,
+        month: month ?? this.month,
+        year: year ?? this.year,
+      );
+  @override
+  String toString() {
+    return (StringBuffer('TopSellingStockData(')
+          ..write('id: $id, ')
+          ..write('idProduct: $idProduct, ')
+          ..write('quantitySold: $quantitySold, ')
+          ..write('month: $month, ')
+          ..write('year: $year')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(id, idProduct, quantitySold, month, year);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is TopSellingStockData &&
+          other.id == this.id &&
+          other.idProduct == this.idProduct &&
+          other.quantitySold == this.quantitySold &&
+          other.month == this.month &&
+          other.year == this.year);
+}
+
+class TopSellingStockCompanion extends UpdateCompanion<TopSellingStockData> {
+  final Value<int> id;
+  final Value<int> idProduct;
+  final Value<int> quantitySold;
+  final Value<String> month;
+  final Value<String> year;
+  const TopSellingStockCompanion({
+    this.id = const Value.absent(),
+    this.idProduct = const Value.absent(),
+    this.quantitySold = const Value.absent(),
+    this.month = const Value.absent(),
+    this.year = const Value.absent(),
+  });
+  TopSellingStockCompanion.insert({
+    this.id = const Value.absent(),
+    required int idProduct,
+    required int quantitySold,
+    required String month,
+    required String year,
+  })  : idProduct = Value(idProduct),
+        quantitySold = Value(quantitySold),
+        month = Value(month),
+        year = Value(year);
+  static Insertable<TopSellingStockData> custom({
+    Expression<int>? id,
+    Expression<int>? idProduct,
+    Expression<int>? quantitySold,
+    Expression<String>? month,
+    Expression<String>? year,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (idProduct != null) 'id_product': idProduct,
+      if (quantitySold != null) 'quantity_sold': quantitySold,
+      if (month != null) 'month': month,
+      if (year != null) 'year': year,
+    });
+  }
+
+  TopSellingStockCompanion copyWith(
+      {Value<int>? id,
+      Value<int>? idProduct,
+      Value<int>? quantitySold,
+      Value<String>? month,
+      Value<String>? year}) {
+    return TopSellingStockCompanion(
+      id: id ?? this.id,
+      idProduct: idProduct ?? this.idProduct,
+      quantitySold: quantitySold ?? this.quantitySold,
+      month: month ?? this.month,
+      year: year ?? this.year,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (idProduct.present) {
+      map['id_product'] = Variable<int>(idProduct.value);
+    }
+    if (quantitySold.present) {
+      map['quantity_sold'] = Variable<int>(quantitySold.value);
+    }
+    if (month.present) {
+      map['month'] = Variable<String>(month.value);
+    }
+    if (year.present) {
+      map['year'] = Variable<String>(year.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('TopSellingStockCompanion(')
+          ..write('id: $id, ')
+          ..write('idProduct: $idProduct, ')
+          ..write('quantitySold: $quantitySold, ')
+          ..write('month: $month, ')
+          ..write('year: $year')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   late final $CustomersTable customers = $CustomersTable(this);
@@ -1915,13 +2570,27 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $ProductsTable products = $ProductsTable(this);
   late final $SuppliersTable suppliers = $SuppliersTable(this);
   late final $OrdersListTable ordersList = $OrdersListTable(this);
+  late final $SalesSummaryTable salesSummary = $SalesSummaryTable(this);
+  late final $TopSellingStockTable topSellingStock =
+      $TopSellingStockTable(this);
   late final ProductsDao productsDao = ProductsDao(this as AppDatabase);
   late final OrdersDao ordersDao = OrdersDao(this as AppDatabase);
   late final OrdersListDao ordersListDao = OrdersListDao(this as AppDatabase);
+  late final SalesSummaryDao salesSummaryDao =
+      SalesSummaryDao(this as AppDatabase);
+  late final TopSellingStockDao topSellingStockDao =
+      TopSellingStockDao(this as AppDatabase);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities =>
-      [customers, orders, products, suppliers, ordersList];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+        customers,
+        orders,
+        products,
+        suppliers,
+        ordersList,
+        salesSummary,
+        topSellingStock
+      ];
 }

@@ -4,6 +4,7 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:mainventori/database/index.dart';
 import 'package:mainventori/screens/home/tabs/tab_orders/models/order_list_controller.dart';
+import 'package:mainventori/utils/times.dart';
 
 class OrdersModel extends ChangeNotifier {
   final database = AppDatabase();
@@ -15,6 +16,8 @@ class OrdersModel extends ChangeNotifier {
   TextEditingController textControllerDeliveryDate = TextEditingController();
   TextEditingController textControllerCustomer = TextEditingController();
   TextEditingController textControllerTotalOrdersSellingPrice =
+      TextEditingController();
+  TextEditingController textControllerTotalOrdersBuyingPrice =
       TextEditingController();
   List<Product> initialProductList = [];
   int initialTotalProductPage = 0;
@@ -31,6 +34,7 @@ class OrdersModel extends ChangeNotifier {
         quantity: TextEditingController(),
         isError: false,
         quantityLeft: 0,
+        productId: 0,
       )
     ];
     ordersListError = [
@@ -47,6 +51,7 @@ class OrdersModel extends ChangeNotifier {
     textControllerCustomer.text = '';
     textControllerDeliveryDate.text = '';
     textControllerTotalOrdersSellingPrice.text = '';
+    textControllerTotalOrdersBuyingPrice.text = '';
     isEmptyCustomer = false;
     isEmptyDeliveryDate = false;
 
@@ -67,8 +72,9 @@ class OrdersModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void onChangeTotalOrdersSellingPrice(String value) {
-    textControllerTotalOrdersSellingPrice.text = value;
+  void onChangeTotalOrdersPrice(String sellingPrice, String buyingPrice) {
+    textControllerTotalOrdersSellingPrice.text = sellingPrice;
+    textControllerTotalOrdersBuyingPrice.text = buyingPrice;
   }
 
   void onChangeCustomer(String value) {
@@ -86,6 +92,7 @@ class OrdersModel extends ChangeNotifier {
       quantity: TextEditingController(),
       isError: false,
       quantityLeft: 0,
+      productId: 0,
     ));
     ordersListError.add([
       'code',
@@ -108,6 +115,7 @@ class OrdersModel extends ChangeNotifier {
     orders[index].name.text = product.name;
     orders[index].price.text = product.buyingPrice.toString();
     orders[index].quantityLeft = product.quantity;
+    orders[index].productId = product.id;
 
     onChangeValue(index, "code");
     onChangeValue(index, "name");
@@ -270,13 +278,36 @@ class OrdersModel extends ChangeNotifier {
     });
 
     if (isSaved) {
+      CurrentDate currentDate = getCurrentDate();
+      int quantitySold = 0;
+
       for (var index = 0; index < orders.length; index++) {
         database.update(database.products)
           ..where((tbl) => tbl.code.equals(orders[index].code.text))
           ..write(ProductsCompanion(
               quantity: Value(orders[index].quantityLeft -
                   int.parse(orders[index].quantity.text))));
+
+        database.topSellingStockDao.setItem(TopSellingStockData(
+          id: 0,
+          idProduct: orders[index].productId,
+          quantitySold: int.parse(orders[index].quantity.text),
+          month: currentDate.month,
+          year: currentDate.year,
+        ));
+
+        quantitySold += int.parse(orders[index].quantity.text);
       }
+
+      database.salesSummaryDao.setCurrentSalesSummary(SalesSummaryData(
+        id: 0,
+        revenue: int.parse(textControllerTotalOrdersSellingPrice.text),
+        cost: int.parse(textControllerTotalOrdersBuyingPrice.text),
+        quantityInHand: 0,
+        quantitySold: quantitySold,
+        month: currentDate.month,
+        year: currentDate.year,
+      ));
     }
 
     return isSaved;

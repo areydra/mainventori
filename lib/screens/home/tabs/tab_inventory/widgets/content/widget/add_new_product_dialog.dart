@@ -208,6 +208,7 @@ class _AddNewProductDialogState extends State<AddNewProductDialog> {
       return;
     }
 
+    int quantity = 0;
     List<ProductsCompanion> products = [];
     DateFormat dateFormat = DateFormat("dd MMMM yyyy");
 
@@ -225,10 +226,13 @@ class _AddNewProductDialogState extends State<AddNewProductDialog> {
           minStock: Value(int.parse(value.minStock.text)),
         ),
       );
+
+      quantity += int.parse(value.quantity.text);
     }
 
     await database.batch((batch) {
       batch.insertAll(database.products, products);
+      database.salesSummaryDao.addCurrentSalesSummaryQuantity(quantity);
     }).then((_) async {
       widget.refreshDataProducts.call();
       SmartDialog.dismiss();

@@ -5,6 +5,10 @@ import 'package:drift/drift.dart';
 import 'package:mainventori/database/daos/orders.dart';
 import 'package:mainventori/database/daos/orders_list.dart';
 import 'package:mainventori/database/daos/products.dart';
+import 'package:mainventori/database/daos/sales_summary.dart';
+import 'package:mainventori/database/daos/top_selling_stock.dart';
+import 'package:mainventori/database/tables/sales_summary.dart';
+import 'package:mainventori/database/tables/top_selling_stock.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 // ignore: depend_on_referenced_packages
@@ -19,9 +23,21 @@ import 'package:mainventori/database/tables/orders_list.dart';
 
 part 'index.g.dart';
 
-@DriftDatabase(
-    tables: [Customers, Orders, Products, Suppliers, OrdersList],
-    daos: [ProductsDao, OrdersDao, OrdersListDao])
+@DriftDatabase(tables: [
+  Customers,
+  Orders,
+  Products,
+  Suppliers,
+  OrdersList,
+  SalesSummary,
+  TopSellingStock
+], daos: [
+  ProductsDao,
+  OrdersDao,
+  OrdersListDao,
+  SalesSummaryDao,
+  TopSellingStockDao,
+])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 

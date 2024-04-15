@@ -27,6 +27,7 @@ Future<void> onPressImportCSV() async {
   String csvData = String.fromCharCodes(result.files.single.bytes!);
   List<List<dynamic>> rows = const CsvToListConverter().convert(csvData);
 
+  int quantity = 0;
   List<ProductsCompanion> products = [];
   DateFormat dateFormat = DateFormat("dd MMMM yyyy");
 
@@ -72,6 +73,8 @@ Future<void> onPressImportCSV() async {
           dateIn: Value(dateIn),
         ),
       );
+
+      quantity += int.tryParse(value[4].toString()) ?? 0;
     }
   }
 
@@ -79,10 +82,10 @@ Future<void> onPressImportCSV() async {
 
   await database.batch((batch) {
     batch.insertAll(database.products, products);
+    database.salesSummaryDao.addCurrentSalesSummaryQuantity(quantity);
   }).then((_) async {
     SmartDialog.dismiss();
   }).catchError((error) async {
-    print('ERROR: ${error.toString()}');
     SmartDialog.dismiss();
     SmartDialog.show(builder: (context) {
       return Container(
