@@ -27,7 +27,8 @@ class _LowQuantityStockState extends State<LowQuantityStock> {
 
     List<Product> fetchedProducts = await (database.select(database.products)
           ..where((column) {
-            return column.quantity.isSmallerOrEqual(column.minStock);
+            return column.quantity.isSmallerOrEqual(column.minStock) &
+                column.quantity.isBiggerThanValue(0);
           })
           ..limit(limitPerPage, offset: pageNumber * limitPerPage))
         .get();
