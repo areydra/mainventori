@@ -4,7 +4,6 @@ import 'package:mainventori/screens/home/tabs/tab_customers/index.dart';
 import 'package:mainventori/screens/home/tabs/tab_dashboard/index.dart';
 import 'package:mainventori/screens/home/tabs/tab_inventory/index.dart';
 import 'package:mainventori/screens/home/tabs/tab_orders/index.dart';
-import 'package:mainventori/screens/home/tabs/tab_settings.dart';
 import 'package:mainventori/screens/home/tabs/tab_suppliers/index.dart';
 
 class Tabs extends StatelessWidget {
@@ -33,8 +32,6 @@ class Tabs extends StatelessWidget {
                 return const TabSuppliers();
               case 4:
                 return const TabCustomers();
-              case 5:
-                return const TabSettings();
               default:
                 return Text(
                   'Not found page',

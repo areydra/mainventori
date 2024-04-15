@@ -5,13 +5,10 @@ import 'package:sidebarx/sidebarx.dart';
 class Sidebar extends StatelessWidget {
   final SidebarXController controller;
 
-  const Sidebar({
-    Key? key,
-    required this.controller
-  }) : super(key: key);
+  const Sidebar({Key? key, required this.controller}) : super(key: key);
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return SidebarX(
       controller: controller,
       theme: const SidebarXTheme(
@@ -69,10 +66,6 @@ class Sidebar extends StatelessWidget {
         const SidebarXItem(
           icon: Icons.people,
           label: 'Customers',
-        ),
-        const SidebarXItem(
-          icon: Icons.settings,
-          label: 'Settings',
         ),
         const SidebarXItem(
           icon: Icons.logout,
