@@ -18,6 +18,15 @@ class OrdersDao extends DatabaseAccessor<AppDatabase> {
 
   OrdersDao(this.appDatabase) : super(appDatabase);
 
+  Future<List<Order>> getAllItems({query = ''}) async {
+    return await (appDatabase.select(appDatabase.orders)
+          ..where((column) {
+            return column.customer.contains(query) |
+                column.productName.contains(query);
+          }))
+        .get();
+  }
+
   Future<DaosGetItemsPerPage> getItemsPerPage(int pageNumber, int limitPerPage,
       [String? query]) async {
     List<Order> fetchOrders = await (appDatabase.select(appDatabase.orders)
