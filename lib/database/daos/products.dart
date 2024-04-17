@@ -49,6 +49,19 @@ class ProductsDao extends DatabaseAccessor<AppDatabase> {
     }
   }
 
+  Future<List<Product>> getAllLowStockItems() async {
+    try {
+      return await (appDatabase.select(appDatabase.products)
+            ..where((column) {
+              return column.quantity.isSmallerOrEqual(column.minStock) &
+                  column.quantity.isBiggerThanValue(0);
+            }))
+          .get();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
   Future<DaosGetItemsPerPage> getItemsPerPage(int pageNumber, int limitPerPage,
       [String? query]) async {
     List<Product> fetchedProducts = await (appDatabase

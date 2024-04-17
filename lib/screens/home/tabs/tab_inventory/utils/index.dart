@@ -111,14 +111,16 @@ Future<void> onPressImportCSV() async {
       );
     });
   });
+
+  database.close();
 }
 
 void exportDataToExcel() async {
   SmartDialog.showLoading();
 
-  try {
-    final database = AppDatabase();
+  final database = AppDatabase();
 
+  try {
     List<Product> products = await database.productsDao.getAllItems();
     int rowIndex = 1;
 
@@ -219,5 +221,37 @@ void exportDataToExcel() async {
   } catch (e) {
     SmartDialog.dismiss();
     SmartDialog.showToast('Terjadi kesalahan saat menyiapkan data.');
+  }
+
+  database.close();
+}
+
+class OverallProducts {
+  late int totalProducts;
+  late int totalLowProducts;
+
+  OverallProducts({
+    required this.totalProducts,
+    required this.totalLowProducts,
+  });
+}
+
+Future<OverallProducts> getOverallProducts() async {
+  final database = AppDatabase();
+
+  try {
+    List<Product> products = await database.productsDao.getAllItems();
+    List<Product> lowStockProducts =
+        await database.productsDao.getAllLowStockItems();
+
+    database.close();
+
+    return OverallProducts(
+      totalProducts: products.length,
+      totalLowProducts: lowStockProducts.length,
+    );
+  } catch (e) {
+    database.close();
+    rethrow;
   }
 }

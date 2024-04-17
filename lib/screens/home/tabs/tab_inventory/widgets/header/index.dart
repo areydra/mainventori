@@ -1,8 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:mainventori/screens/home/tabs/tab_inventory/utils/index.dart';
 import 'package:mainventori/widgets/separator_vertical.dart';
 
-class HeaderInventory extends StatelessWidget {
+class HeaderInventory extends StatefulWidget {
   const HeaderInventory({Key? key}) : super(key: key);
+
+  @override
+  State<HeaderInventory> createState() => _HeaderInventoryState();
+}
+
+class _HeaderInventoryState extends State<HeaderInventory> {
+  int totalProducts = 0;
+  int totalLowStockProducts = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    try {
+      getOverallProducts().then((value) {
+        setState(() {
+          totalProducts = value.totalProducts;
+          totalLowStockProducts = value.totalLowProducts;
+        });
+      });
+    } catch (e) {}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,16 +37,16 @@ class HeaderInventory extends StatelessWidget {
             color: Colors.white,
           ),
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-          child: const Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Overall Inventory',
                 style: TextStyle(
                   fontSize: 20,
                 ),
               ),
-              SizedBox(height: 22),
+              const SizedBox(height: 22),
               Row(
                 children: [
                   SizedBox(
@@ -31,32 +54,7 @@ class HeaderInventory extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Categories',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: Color.fromRGBO(21, 112, 239, 1),
-                            ),
-                          ),
-                          SizedBox(height: 12),
-                          Text(
-                            '14',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                              color: Color.fromRGBO(93, 102, 121, 1),
-                            ),
-                          )
-                        ],
-                      )),
-                  SeparatorVertical(),
-                  SizedBox(
-                      width: 150,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
+                          const Text(
                             'Total Products',
                             style: TextStyle(
                               fontSize: 16,
@@ -64,10 +62,10 @@ class HeaderInventory extends StatelessWidget {
                               color: Color.fromRGBO(225, 145, 51, 1),
                             ),
                           ),
-                          SizedBox(height: 12),
+                          const SizedBox(height: 12),
                           Text(
-                            '868',
-                            style: TextStyle(
+                            totalProducts.toString(),
+                            style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                               color: Color.fromRGBO(93, 102, 121, 1),
@@ -75,13 +73,13 @@ class HeaderInventory extends StatelessWidget {
                           )
                         ],
                       )),
-                  SeparatorVertical(),
+                  const SeparatorVertical(),
                   SizedBox(
                     width: 150,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'Low Stocks',
                           style: TextStyle(
                             fontSize: 16,
@@ -89,10 +87,10 @@ class HeaderInventory extends StatelessWidget {
                             color: Color.fromRGBO(243, 105, 96, 1),
                           ),
                         ),
-                        SizedBox(height: 12),
+                        const SizedBox(height: 12),
                         Text(
-                          '12',
-                          style: TextStyle(
+                          totalLowStockProducts.toString(),
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                             color: Color.fromRGBO(93, 102, 121, 1),
