@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:csv/csv.dart';
 import 'package:drift/drift.dart';
+import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:mainventori/database/index.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 int removePriceCurrency(String value) {
   String priceString = value.replaceAll("Rp", "").replaceAll(".", "");
@@ -106,4 +111,113 @@ Future<void> onPressImportCSV() async {
       );
     });
   });
+}
+
+void exportDataToExcel() async {
+  SmartDialog.showLoading();
+
+  try {
+    final database = AppDatabase();
+
+    List<Product> products = await database.productsDao.getAllItems();
+    int rowIndex = 1;
+
+    var excel = Excel.createExcel();
+    Sheet sheetObject = excel[excel.getDefaultSheet()!];
+
+    CellStyle cellStyle =
+        CellStyle(backgroundColorHex: '#448DF2', fontColorHex: '#FFFFFF');
+    List<Data> column = [
+      sheetObject.cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 0)),
+      sheetObject.cell(CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: 0)),
+      sheetObject.cell(CellIndex.indexByColumnRow(columnIndex: 2, rowIndex: 0)),
+      sheetObject.cell(CellIndex.indexByColumnRow(columnIndex: 3, rowIndex: 0)),
+      sheetObject.cell(CellIndex.indexByColumnRow(columnIndex: 4, rowIndex: 0)),
+      sheetObject.cell(CellIndex.indexByColumnRow(columnIndex: 5, rowIndex: 0)),
+      sheetObject.cell(CellIndex.indexByColumnRow(columnIndex: 6, rowIndex: 0)),
+    ];
+    column[0].value = const TextCellValue('Kode Produk');
+    column[0].cellStyle = cellStyle;
+    column[1].value = const TextCellValue('Nama Produk');
+    column[1].cellStyle = cellStyle;
+    column[2].value = const TextCellValue('Harga Beli');
+    column[2].cellStyle = cellStyle;
+    column[3].value = const TextCellValue('Jumlah Stok');
+    column[3].cellStyle = cellStyle;
+    column[4].value = const TextCellValue('Min Stok');
+    column[4].cellStyle = cellStyle;
+    column[5].value = const TextCellValue('Tanggal Masuk');
+    column[5].cellStyle = cellStyle;
+    column[6].value = const TextCellValue('Ketersediaan');
+    column[6].cellStyle = cellStyle;
+
+    for (int index = 0; index < products.length; index++) {
+      List<Data> column = [
+        sheetObject.cell(
+            CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: rowIndex)),
+        sheetObject.cell(
+            CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: rowIndex)),
+        sheetObject.cell(
+            CellIndex.indexByColumnRow(columnIndex: 2, rowIndex: rowIndex)),
+        sheetObject.cell(
+            CellIndex.indexByColumnRow(columnIndex: 3, rowIndex: rowIndex)),
+        sheetObject.cell(
+            CellIndex.indexByColumnRow(columnIndex: 4, rowIndex: rowIndex)),
+        sheetObject.cell(
+            CellIndex.indexByColumnRow(columnIndex: 5, rowIndex: rowIndex)),
+        sheetObject.cell(
+            CellIndex.indexByColumnRow(columnIndex: 6, rowIndex: rowIndex)),
+      ];
+
+      column[0].value = TextCellValue(products[index].code);
+      column[1].value = TextCellValue(products[index].name);
+      column[2].value = TextCellValue(products[index].buyingPrice.toString());
+      column[3].value = TextCellValue(products[index].quantity.toString());
+      column[4].value = TextCellValue(products[index].minStock.toString());
+      column[5].value = TextCellValue(
+          DateFormat('dd MMMM yyyy').format(products[index].dateIn));
+      column[6].value = TextCellValue(products[index].quantity == 0
+          ? 'Habis'
+          : products[index].quantity <= products[index].minStock
+              ? 'Menipis'
+              : 'Tersedia');
+
+      rowIndex++;
+    }
+
+    var fileBytes = excel.save();
+    final Directory? downloadsDir = await getDownloadsDirectory();
+
+    String savedFileName = '';
+
+    if (downloadsDir != null) {
+      int suffix = 1;
+      String baseFileName = 'List_Produk.xlsx';
+      String filePath = join(downloadsDir.path, baseFileName);
+      File file = File(filePath);
+
+      while (await file.exists()) {
+        // If the file already exists, increment the suffix and try again
+        filePath = join(downloadsDir.path,
+            '${baseFileName.replaceAll('.xlsx', '')}_$suffix.xlsx');
+        file = File(filePath);
+        suffix++;
+      }
+      savedFileName =
+          file.path.toString().split(Platform.pathSeparator).last.toString();
+
+      // Create and write to the file
+      await file.create(recursive: true);
+      await file.writeAsBytes(fileBytes!);
+    }
+
+    SmartDialog.dismiss();
+    SmartDialog.showToast(
+      'Data telah disimpan dalam folder Downloads dengan nama file $savedFileName',
+      displayTime: const Duration(seconds: 3),
+    );
+  } catch (e) {
+    SmartDialog.dismiss();
+    SmartDialog.showToast('Terjadi kesalahan saat menyiapkan data.');
+  }
 }
