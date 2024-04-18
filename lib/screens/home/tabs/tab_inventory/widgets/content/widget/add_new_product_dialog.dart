@@ -70,6 +70,24 @@ class _AddNewProductDialogState extends State<AddNewProductDialog> {
 
   List<String> shouldCheckValidationByFieldIndex = [];
   bool isSaving = false;
+  List<String> suppliers = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    database.suppliersDao.getItemsPerPage().then((value) {
+      List<String> newSuppliers = [];
+
+      for (var i = 0; i < value.length; i++) {
+        newSuppliers.add(value[i].name);
+      }
+
+      setState(() {
+        suppliers = newSuppliers;
+      });
+    });
+  }
 
   bool validation() {
     bool isFieldValid = true;
@@ -369,7 +387,7 @@ class _AddNewProductDialogState extends State<AddNewProductDialog> {
                     Dropdown(
                       label: '',
                       hintTextField: 'Pilih supplier',
-                      dropdownItems: const ['MaFood', 'MaDrink'],
+                      dropdownItems: suppliers,
                       selectedValue: listController[index].supplier,
                       isError: shouldCheckValidationByFieldIndex
                               .contains(index.toString())

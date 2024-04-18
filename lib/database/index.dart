@@ -2,10 +2,12 @@ import 'dart:io';
 
 import 'package:drift/native.dart';
 import 'package:drift/drift.dart';
+import 'package:mainventori/database/daos/customers.dart';
 import 'package:mainventori/database/daos/orders.dart';
 import 'package:mainventori/database/daos/orders_list.dart';
 import 'package:mainventori/database/daos/products.dart';
 import 'package:mainventori/database/daos/sales_summary.dart';
+import 'package:mainventori/database/daos/suppliers.dart';
 import 'package:mainventori/database/daos/top_selling_stock.dart';
 import 'package:mainventori/database/tables/sales_summary.dart';
 import 'package:mainventori/database/tables/top_selling_stock.dart';
@@ -37,6 +39,8 @@ part 'index.g.dart';
   OrdersListDao,
   SalesSummaryDao,
   TopSellingStockDao,
+  SuppliersDao,
+  CustomersDao,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mainventori/database/index.dart';
 import 'package:mainventori/store/index.dart';
 import 'package:mainventori/widgets/button.dart';
 import 'package:mainventori/widgets/date_picker.dart';
@@ -21,6 +22,25 @@ class AddNewOrderDialogFooter extends ConsumerStatefulWidget {
 
 class _AddNewOrderDialogFooterState
     extends ConsumerState<AddNewOrderDialogFooter> {
+  List<String> customers = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    AppDatabase().customersDao.getItemsPerPage().then((value) {
+      List<String> newCustomers = [];
+
+      for (var i = 0; i < value.length; i++) {
+        newCustomers.add(value[i].name);
+      }
+
+      setState(() {
+        customers = newCustomers;
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final isSaving = ref.watch(ordersStore.select((value) => value.isSaving));
@@ -68,7 +88,7 @@ class _AddNewOrderDialogFooterState
                 Dropdown(
                   label: 'Customer',
                   hintTextField: 'Pilih Costumer',
-                  dropdownItems: const ['MaCustomer', 'MaBlock'],
+                  dropdownItems: customers,
                   isError: isEmptyCustomer,
                   selectedValue: orderAction.textControllerCustomer,
                   onChangeValue: orderAction.onChangeCustomer,
