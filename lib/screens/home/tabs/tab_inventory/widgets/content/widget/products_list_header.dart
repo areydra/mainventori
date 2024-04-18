@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:mainventori/store/index.dart';
 import 'package:mainventori/widgets/separator_horizontal.dart';
 
-class ProductListHeader extends StatelessWidget {
+class ProductListHeader extends ConsumerWidget {
   const ProductListHeader({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user = ref.read(userStore.notifier.select((value) => value.user));
+
     return Column(
       children: [
         const SeparatorHorizontal(),
         const SizedBox(height: 15),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: const Row(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              SizedBox(
+              const SizedBox(
                 width: 135,
                 child: Text(
                   'Kode Produk',
@@ -25,7 +29,7 @@ class ProductListHeader extends StatelessWidget {
                       fontWeight: FontWeight.w500),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 220,
                 child: Text(
                   'Nama Produk',
@@ -35,7 +39,7 @@ class ProductListHeader extends StatelessWidget {
                       fontWeight: FontWeight.w500),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 165,
                 child: Text(
                   'Harga Beli',
@@ -45,7 +49,7 @@ class ProductListHeader extends StatelessWidget {
                       fontWeight: FontWeight.w500),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 165,
                 child: Text(
                   'Jumlah Stok',
@@ -55,7 +59,7 @@ class ProductListHeader extends StatelessWidget {
                       fontWeight: FontWeight.w500),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 165,
                 child: Text(
                   'Min Stok',
@@ -65,7 +69,7 @@ class ProductListHeader extends StatelessWidget {
                       fontWeight: FontWeight.w500),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 220,
                 child: Text(
                   'Tanggal Masuk',
@@ -75,7 +79,7 @@ class ProductListHeader extends StatelessWidget {
                       fontWeight: FontWeight.w500),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 165,
                 child: Text(
                   'Ketersediaan',
@@ -85,7 +89,10 @@ class ProductListHeader extends StatelessWidget {
                       fontWeight: FontWeight.w500),
                 ),
               ),
-              SizedBox(width: 100),
+              Visibility(
+                visible: user!.isAdmin,
+                child: const SizedBox(width: 100),
+              ),
             ],
           ),
         ),

@@ -23,7 +23,7 @@ class _LoginFormState extends ConsumerState<LoginForm> {
       userAction.setUser(User(email: textEmail.text, isAdmin: true));
     }
 
-    if (textEmail.text == 'staff@user.com' && textPassword.text == 'user') {
+    if (textEmail.text == 'staff@user.com' && textPassword.text == 'staff') {
       userAction.setUser(User(email: textEmail.text, isAdmin: false));
     }
   }
