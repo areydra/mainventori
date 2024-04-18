@@ -97,6 +97,7 @@ class ProductsListContent extends ConsumerWidget {
                     ),
                     SizedBox(
                       width: 165,
+                      height: 44,
                       child: products[index].quantity == 0
                           ? const Text(
                               'Out of stock',
