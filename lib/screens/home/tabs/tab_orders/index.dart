@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mainventori/screens/home/tabs/tab_orders/widgets/overall_orders.dart';
-import 'package:mainventori/screens/home/tabs/tab_orders/widgets/products_orders.dart';
+import 'package:mainventori/screens/home/tabs/tab_orders/widgets/product_orders/index.dart';
 
 class TabOrders extends StatelessWidget {
-  const TabOrders({ Key? key }) : super(key: key);
+  const TabOrders({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       height: double.infinity,
