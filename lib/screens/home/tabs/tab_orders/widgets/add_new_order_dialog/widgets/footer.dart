@@ -112,10 +112,8 @@ class _AddNewOrderDialogFooterState
                   padding: const EdgeInsets.only(top: 18),
                   child: Button(
                     onPress: () {
-                      orderAction.saveToDatabase().then((isSuccess) {
-                        if (isSuccess) {
-                          widget.refreshDataOrders();
-                        }
+                      orderAction.saveToDatabase().then((value) {
+                        widget.refreshDataOrders();
                       });
                     },
                     text: isSaving ? 'Adding Order...' : 'Add Order',

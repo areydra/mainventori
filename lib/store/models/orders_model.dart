@@ -209,107 +209,111 @@ class OrdersModel extends ChangeNotifier {
     return isFieldValid;
   }
 
-  Future<bool> saveToDatabase() async {
-    isSaving = true;
-    isSaved = false;
+  Future saveToDatabase() async {
+    try {
+      isSaving = true;
+      isSaved = false;
 
-    if (!validation()) {
-      isSaving = false;
-      notifyListeners();
-      return isSaved;
-    }
+      if (!validation()) {
+        isSaving = false;
+        notifyListeners();
+        throw Exception('Error validation');
+      }
 
-    List<OrdersListCompanion> ordersListCompanion = [];
-    DateFormat dateFormat = DateFormat("dd MMMM yyyy");
-    DateTime currentDate = DateTime.now();
+      List<OrdersListCompanion> ordersListCompanion = [];
+      DateFormat dateFormat = DateFormat("dd MMMM yyyy");
+      DateTime currentDate = DateTime.now();
 
-    final insertedId =
-        await database.into(database.orders).insert(OrdersCompanion.insert(
-              productName: orders[0].name.text,
-              productQuantity: int.parse(orders[0].quantity.text),
-              productSellingPrice: int.parse(orders[0].sellingPrice.text),
-              totalOrdersQuantity: orders.length,
-              totalOrdersSellingPrice:
-                  int.parse(textControllerTotalOrdersSellingPrice.text),
-              deliveryDate: dateFormat.parse(textControllerDeliveryDate.text),
-              customer: textControllerCustomer.text,
-              createdAt: currentDate,
-            ));
+      final insertedId =
+          await database.into(database.orders).insert(OrdersCompanion.insert(
+                productName: orders[0].name.text,
+                productQuantity: int.parse(orders[0].quantity.text),
+                productSellingPrice: int.parse(orders[0].sellingPrice.text),
+                totalOrdersQuantity: orders.length,
+                totalOrdersSellingPrice:
+                    int.parse(textControllerTotalOrdersSellingPrice.text),
+                deliveryDate: dateFormat.parse(textControllerDeliveryDate.text),
+                customer: textControllerCustomer.text,
+                createdAt: currentDate,
+              ));
 
-    for (var value in orders) {
-      ordersListCompanion.add(OrdersListCompanion(
-        idOrders: Value(insertedId),
-        productCode: Value(value.code.text),
-        productName: Value(value.name.text),
-        originalPrice: Value(int.parse(value.price.text)),
-        sellingPrice: Value(int.parse(value.sellingPrice.text)),
-        quantity: Value(int.parse(value.quantity.text)),
-        createdAt: Value(currentDate),
-      ));
-    }
+      for (var value in orders) {
+        ordersListCompanion.add(OrdersListCompanion(
+          idOrders: Value(insertedId),
+          productCode: Value(value.code.text),
+          productName: Value(value.name.text),
+          originalPrice: Value(int.parse(value.price.text)),
+          sellingPrice: Value(int.parse(value.sellingPrice.text)),
+          quantity: Value(int.parse(value.quantity.text)),
+          createdAt: Value(currentDate),
+        ));
+      }
 
-    await database.batch((batch) {
-      batch.insertAll(database.ordersList, ordersListCompanion);
-    }).then((_) async {
-      isSaved = true;
-      SmartDialog.dismiss();
-    }).catchError((error) async {
-      SmartDialog.show(builder: (context) {
-        return Container(
-          height: 150,
-          width: 350,
-          decoration: BoxDecoration(
-            color: Colors.black,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          alignment: Alignment.center,
-          child: const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Text(
-              'Maaf, sistem sedang gangguan!',
-              style: TextStyle(color: Colors.white),
+      await database.batch((batch) {
+        batch.insertAll(database.ordersList, ordersListCompanion);
+      }).then((_) async {
+        isSaved = true;
+        SmartDialog.dismiss();
+      }).catchError((error) async {
+        SmartDialog.show(builder: (context) {
+          return Container(
+            height: 150,
+            width: 350,
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(10),
             ),
-          ),
-        );
+            alignment: Alignment.center,
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Maaf, sistem sedang gangguan!',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          );
+        });
       });
-    }).whenComplete(() {
-      isSaving = false;
-      notifyListeners();
-    });
 
-    if (isSaved) {
-      CurrentDate currentDate = getCurrentDate();
-      int quantitySold = 0;
+      if (isSaved) {
+        CurrentDate currentDate = getCurrentDate();
+        int quantitySold = 0;
 
-      for (var index = 0; index < orders.length; index++) {
-        database.update(database.products)
-          ..where((tbl) => tbl.code.equals(orders[index].code.text))
-          ..write(ProductsCompanion(
-              quantity: Value(orders[index].quantityLeft -
-                  int.parse(orders[index].quantity.text))));
+        for (var index = 0; index < orders.length; index++) {
+          database.update(database.products)
+            ..where((tbl) => tbl.code.equals(orders[index].code.text))
+            ..write(ProductsCompanion(
+                quantity: Value(orders[index].quantityLeft -
+                    int.parse(orders[index].quantity.text))));
 
-        database.topSellingStockDao.setItem(TopSellingStockData(
+          database.topSellingStockDao.setItem(TopSellingStockData(
+            id: 0,
+            idProduct: orders[index].productId,
+            quantitySold: int.parse(orders[index].quantity.text),
+            month: currentDate.month,
+            year: currentDate.year,
+          ));
+
+          quantitySold += int.parse(orders[index].quantity.text);
+        }
+
+        database.salesSummaryDao.setCurrentSalesSummary(SalesSummaryData(
           id: 0,
-          idProduct: orders[index].productId,
-          quantitySold: int.parse(orders[index].quantity.text),
+          revenue: int.parse(textControllerTotalOrdersSellingPrice.text),
+          cost: int.parse(textControllerTotalOrdersBuyingPrice.text),
+          quantityInHand: 0,
+          quantitySold: quantitySold,
           month: currentDate.month,
           year: currentDate.year,
         ));
-
-        quantitySold += int.parse(orders[index].quantity.text);
       }
-
-      database.salesSummaryDao.setCurrentSalesSummary(SalesSummaryData(
-        id: 0,
-        revenue: int.parse(textControllerTotalOrdersSellingPrice.text),
-        cost: int.parse(textControllerTotalOrdersBuyingPrice.text),
-        quantityInHand: 0,
-        quantitySold: quantitySold,
-        month: currentDate.month,
-        year: currentDate.year,
-      ));
+      isSaving = false;
+      notifyListeners();
+      Future.value();
+    } catch (e) {
+      isSaving = false;
+      notifyListeners();
+      Future.error(e);
     }
-
-    return isSaved;
   }
 }
