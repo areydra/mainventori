@@ -55,11 +55,6 @@ class _TopSellingStockState extends State<TopSellingStock> {
                   'Top Selling Stock',
                   style: TextStyle(fontSize: 20),
                 ),
-                Text(
-                  'See All',
-                  style: TextStyle(
-                      fontSize: 14, color: Color.fromRGBO(15, 80, 170, 1)),
-                ),
               ],
             ),
           ),
