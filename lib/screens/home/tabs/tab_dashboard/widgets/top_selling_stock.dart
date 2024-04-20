@@ -76,39 +76,33 @@ class _TopSellingStockState extends State<TopSellingStock> {
                   ),
                 ),
                 SizedBox(
-                  width: 130,
-                  child: Flexible(
-                    child: Text(
-                      'Sold Quantity',
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: Color.fromRGBO(93, 102, 121, 1)),
-                    ),
+                  width: 110,
+                  child: Text(
+                    'Sold Quantity',
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromRGBO(93, 102, 121, 1)),
+                  ),
+                ),
+                SizedBox(
+                  width: 150,
+                  child: Text(
+                    'Remaining Quantity',
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromRGBO(93, 102, 121, 1)),
                   ),
                 ),
                 SizedBox(
                   width: 130,
-                  child: Flexible(
-                    child: Text(
-                      'Remaining Quantity',
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: Color.fromRGBO(93, 102, 121, 1)),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 130,
-                  child: Flexible(
-                    child: Text(
-                      'Price',
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                          color: Color.fromRGBO(93, 102, 121, 1)),
-                    ),
+                  child: Text(
+                    'Price',
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: Color.fromRGBO(93, 102, 121, 1)),
                   ),
                 ),
               ],
@@ -140,39 +134,33 @@ class _TopSellingStockState extends State<TopSellingStock> {
                             ),
                           ),
                           SizedBox(
-                            width: 130,
-                            child: Flexible(
-                              child: Text(
-                                products[index].quantitySold.toString(),
-                                style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color.fromRGBO(93, 102, 121, 1)),
-                              ),
+                            width: 110,
+                            child: Text(
+                              products[index].quantitySold.toString(),
+                              style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color.fromRGBO(93, 102, 121, 1)),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 150,
+                            child: Text(
+                              products[index].quantity.toString(),
+                              style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color.fromRGBO(93, 102, 121, 1)),
                             ),
                           ),
                           SizedBox(
                             width: 130,
-                            child: Flexible(
-                              child: Text(
-                                products[index].quantity.toString(),
-                                style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color.fromRGBO(93, 102, 121, 1)),
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 130,
-                            child: Flexible(
-                              child: Text(
-                                'Rp${NumberFormat.decimalPattern('id').format(products[index].price)}',
-                                style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                    color: Color.fromRGBO(93, 102, 121, 1)),
-                              ),
+                            child: Text(
+                              'Rp${NumberFormat.decimalPattern('id').format(products[index].price)}',
+                              style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: Color.fromRGBO(93, 102, 121, 1)),
                             ),
                           ),
                         ],

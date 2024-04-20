@@ -5,10 +5,10 @@ import 'package:mainventori/screens/home/tabs/tab_dashboard/widgets/sales_overvi
 import 'package:mainventori/screens/home/tabs/tab_dashboard/widgets/top_selling_stock.dart';
 
 class TabDashboard extends StatelessWidget {
-  const TabDashboard({ Key? key }) : super(key: key);
+  const TabDashboard({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       height: double.infinity,
@@ -18,34 +18,23 @@ class TabDashboard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Expanded(
-                flex: 2,
-                child: 
-                SalesOverview(),
-              ),
-              Expanded(
-                flex: 1,
-                child: 
-                InventorySummary()              
+              Expanded(child: SalesOverview()),
+              SizedBox(
+                width: 356,
+                child: InventorySummary(),
               )
             ],
           ),
-          SizedBox(height: 22),    
+          SizedBox(height: 22),
           Expanded(
-            child: 
-            Row(
+            child: Row(
               children: [
-                Expanded(
-                  flex: 2,
-                  child: 
-                  TopSellingStock(),
-                ),
+                Expanded(child: TopSellingStock()),
                 SizedBox(width: 22),
-                Expanded(
-                  flex: 1,
-                  child: 
-                  LowQuantityStock(),
-                )                
+                SizedBox(
+                  width: 356,
+                  child: LowQuantityStock(),
+                )
               ],
             ),
           )
