@@ -49,10 +49,20 @@ class AppDatabase extends _$AppDatabase {
   int get schemaVersion => 1;
 }
 
+const isRelease = true;
+
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
-    final dbFolder = await getApplicationDocumentsDirectory();
-    final file = File(p.join(dbFolder.path, 'db.sqlite'));
+    String filePath;
+    if (isRelease) {
+      final programFilesDirectory = Platform.environment['ProgramFiles(x86)'];
+      filePath = p.join(programFilesDirectory!, 'MaInventori', 'data');
+    } else {
+      final documentsFilesDirectory = await getApplicationDocumentsDirectory();
+      filePath = documentsFilesDirectory.path;
+    }
+
+    final file = File(p.join(filePath, 'db.sqlite'));
 
     if (Platform.isAndroid) {
       await applyWorkaroundToOpenSqlite3OnOldAndroidVersions();
