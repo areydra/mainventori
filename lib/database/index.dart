@@ -49,7 +49,7 @@ class AppDatabase extends _$AppDatabase {
   int get schemaVersion => 1;
 }
 
-const isRelease = true;
+const isRelease = false;
 
 LazyDatabase _openConnection() {
   return LazyDatabase(() async {
