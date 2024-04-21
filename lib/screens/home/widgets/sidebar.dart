@@ -37,11 +37,11 @@ class Sidebar extends ConsumerWidget {
       showToggleButton: false,
       headerBuilder: (context, extended) {
         return SizedBox(
-          width: 232,
+          width: 250,
           height: 100,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Image.asset('assets/images/avatar.png'),
+            child: Image.asset('assets/logos/mawavi_soft_land.png'),
           ),
         );
       },
